@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preload" as="image" href="images/Happy Birthday.jpg" fetchpriority="high">
 </head>
 <body>
     <!-- Header -->
@@ -18,73 +19,198 @@
             </div>
             <ul class="nav-menu">
                 <li><a href="#party-details">Details</a></li>
+                <li><a href="#milestone-section">Milestones</a></li>
                 <li><a href="#photo-gallery">Gallery</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Parallax Background Elements -->
-    <div class="parallax-container">
-        <div class="floating-element balloon-1" data-speed="0.5">
-            <i class="fas fa-heart"></i>
+    <!-- Interactive Baby Dragon -->
+    <div class="baby-dragon-container">
+        <div class="baby-dragon" id="babyDragon" data-toy="dragon">
+            <div class="dragon-sparkles">
+                <span class="sparkle-1">✨</span>
+                <span class="sparkle-2">⭐</span>
+                <span class="sparkle-3">💫</span>
+            </div>
         </div>
-        <div class="floating-element balloon-2" data-speed="0.3">
-            <i class="fas fa-star"></i>
-        </div>
-        <div class="floating-element balloon-3" data-speed="0.7">
-            <i class="fas fa-gift"></i>
-        </div>
-        <div class="floating-element balloon-4" data-speed="0.4">
-            <i class="fas fa-balloon"></i>
-        </div>
-        <div class="floating-element balloon-5" data-speed="0.6">
-            <i class="fas fa-birthday-cake"></i>
-        </div>
-        <div class="floating-element confetti-1" data-speed="0.8">✨</div>
-        <div class="floating-element confetti-2" data-speed="0.9">🎊</div>
-        <div class="floating-element confetti-3" data-speed="0.2">🎉</div>
-        <div class="floating-element confetti-4" data-speed="0.5">🎈</div>
-        <div class="floating-element confetti-5" data-speed="0.7">🎂</div>
-        <div class="floating-element confetti-6" data-speed="0.3">🎁</div>
-        <div class="floating-element confetti-7" data-speed="0.6">⭐</div>
-        <div class="floating-element confetti-8" data-speed="0.4">💖</div>
     </div>
 
-    <!-- Hero Section -->
+    
+
+    <!-- Reduced Interactive Floating Toys -->
+    <div class="floating-toys-container">
+        <div class="floating-toy teddy-bear" data-toy="bear">
+            <div class="toy-3d">🧸</div>
+        </div>
+    </div>
+
+
+    <!-- Musical Mobile -->
+    <div class="musical-mobile">
+        <div class="mobile-arm"></div>
+        <div class="mobile-toys">
+            <div class="mobile-toy mobile-toy-1">🌙</div>
+            <div class="mobile-toy mobile-toy-2">⭐</div>
+            <div class="mobile-toy mobile-toy-3">☁️</div>
+            <div class="mobile-toy mobile-toy-4">🌈</div>
+        </div>
+    </div>
+
+    <!-- Mouse Trail Sparkles -->
+    <div class="sparkle-trail"></div>
+
+ 
+    <!-- Spectacular Hero Section -->
     <section class="hero">
         <div class="parallax-bg" data-speed="0.5"></div>
+        
+        <!-- Hero Fireworks Animation -->
+        <div class="hero-fireworks" id="heroFireworks"></div>
+        
+        <!-- Dramatic Title Entrance -->
         <div class="hero-content">
-            <div class="birthday-decorations">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-heart"></i>
-                <i class="fas fa-gift"></i>
-                <i class="fas fa-balloon"></i>
+            <div class="spectacular-decorations">
+                <div class="rainbow-arch"></div>
+                <div class="floating-stars">
+                    <i class="fas fa-star star-1"></i>
+                    <i class="fas fa-star star-2"></i>
+                    <i class="fas fa-star star-3"></i>
+                    <i class="fas fa-star star-4"></i>
+                </div>
             </div>
-            <h1 class="hero-title">
-                🎉 You're Invited! 🎉
-            </h1>
-            <h2 class="birthday-girl">
-                Celebrating <span class="name-highlight">[Daughter's Name]</span>'s Birthday!
+            
+            <div class="title-explosion">
+                <h1 class="hero-title spectacular-entrance">
+                    <span class="title-word word-1">🎉</span>
+                    <span class="title-word word-2">You're</span>
+                    <span class="title-word word-3">Invited!</span>
+                    <span class="title-word word-4">🎉</span>
+                </h1>
+                <div class="title-rainbow-trail"></div>
+            </div>
+            
+            <h2 class="birthday-girl magical-entrance">
+                Celebrating <span class="name-highlight dragon-name">Minh Châu's</span> 1st Birthday!
             </h2>
-            <p class="hero-subtitle">
-                Join us as we celebrate our little princess turning ONE! A magical milestone filled with love, joy, and precious memories!
+            
+            <div class="birth-announcement magical-entrance">
+                <div class="announcement-card">
+                    <div class="announcement-text">
+                        <p><strong>Little Princess</strong></p>
+                        <p>September 8th, 2024 • 3kg • 50cm</p>
+                    </div>
+                    <div class="card-sparkles"></div>
+                </div>
+            </div>
+            
+            <p class="hero-subtitle magical-entrance">
+                Join us for a <span class="highlight-magical">MAGICAL</span> celebration! 
+                Our little dragon turns ONE! ✨🌟
             </p>
-            <div class="cta-buttons">
-                <a href="#photo-gallery" class="btn btn-primary">
+            
+            <div class="cta-buttons magical-entrance">
+                <a href="#photo-gallery" class="btn btn-primary spectacular-btn">
                     <i class="fas fa-camera"></i>
-                    View Gallery
+                    <span>View Gallery</span>
+                    <div class="btn-sparkles"></div>
                 </a>
-                <a href="#party-details" class="btn btn-secondary">
+                <a href="#party-details" class="btn btn-secondary spectacular-btn">
                     <i class="fas fa-info-circle"></i>
-                    Party Details
+                    <span>Party Details</span>
+                    <div class="btn-sparkles"></div>
                 </a>
             </div>
         </div>
+        
+        <!-- MEGA SPECTACULAR Cake with Ultimate Effects -->
         <div class="hero-image">
-            <div class="birthday-cake">
-                <i class="fas fa-birthday-cake"></i>
+            <div class="cake-stage">
+                <!-- Multiple Spotlights -->
+                <div class="cake-spotlight spotlight-1"></div>
+                <div class="cake-spotlight spotlight-2"></div>
+                <div class="cake-spotlight spotlight-3"></div>
+                
+                <!-- Fireworks Behind Cake -->
+                <div class="cake-fireworks" id="cakeFireworks"></div>
+                
+                <div class="interactive-cake-container magical-cake-entrance">
+                    <div class="birthday-cake-3d mega-cake" id="interactiveCake">
+                        
+                        <!-- 3-Tier Spectacular Cake -->
+                        <div class="cake-tier cake-tier-3">
+                            <div class="tier-base">🎂</div>
+                            <div class="tier-decorations">
+                                <div class="tier-decoration">🌟</div>
+                                <div class="tier-decoration">🌈</div>
+                                <div class="tier-decoration">🦄</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cake-tier cake-tier-2">
+                            <div class="tier-base">🧁</div>
+                            <div class="tier-decorations">
+                                <div class="tier-decoration">🌸</div>
+                                <div class="tier-decoration">🎀</div>
+                                <div class="tier-decoration">💖</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cake-tier cake-tier-1">
+                            <div class="tier-base">🍰</div>
+                            <div class="cake-candles-spectacular">
+                                <div class="mega-candle candle-1" data-candle="1">
+                                    <div class="flame mega-flame">🕯️</div>
+                                    <div class="flame-glow"></div>
+                                </div>
+                            </div>
+                            <div class="tier-decorations top-tier">
+                                <div class="tier-decoration crown">👑</div>
+                                <div class="tier-decoration">💎</div>
+                                <div class="tier-decoration">✨</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Enhanced Magic Effects -->
+                        <div class="cake-magic-aura mega-aura"></div>
+                        <div class="cake-energy-rings">
+                            <div class="energy-ring ring-1"></div>
+                            <div class="energy-ring ring-2"></div>
+                            <div class="energy-ring ring-3"></div>
+                        </div>
+                        
+                        <!-- Floating Magic Particles -->
+                        <div class="cake-magic-particles">
+                            <div class="magic-particle particle-1">✨</div>
+                            <div class="magic-particle particle-2">⭐</div>
+                            <div class="magic-particle particle-3">💫</div>
+                            <div class="magic-particle particle-4">🌟</div>
+                            <div class="magic-particle particle-5">💖</div>
+                            <div class="magic-particle particle-6">🦄</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cake-instruction mega-instruction magical-entrance">
+                        <p>🌬️ Click the MEGA CAKE for Ultimate Birthday Magic! 🌬️</p>
+                        <div class="instruction-sparkles">
+                            <span>✨</span><span>⭐</span><span>✨</span>
+                        </div>
+                    </div>
+                    
+                    <div class="wish-particles mega-wish-particles" id="wishParticles"></div>
+                </div>
+                
+                <!-- Enhanced Rainbow Base -->
+                <div class="cake-rainbow-base mega-rainbow-base"></div>
+                <div class="cake-ground-effects">
+                    <div class="ground-sparkle"></div>
+                    <div class="ground-stars"></div>
+                </div>
             </div>
         </div>
+        
+        <!-- Magical Entrance Particles -->
+        <div class="hero-entrance-particles" id="heroEntranceParticles"></div>
     </section>
 
     <!-- Party Details Section -->
@@ -129,6 +255,86 @@
         </div>
     </section>
 
+    <!-- Baby Milestone Timeline -->
+    <section id="milestone-section" class="milestone-section">
+        <div class="milestone-parallax-bg"></div>
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-baby"></i>
+                Minh Châu's Amazing First Year Journey
+            </h2>
+            <div class="milestone-timeline">
+                <div class="milestone-item" data-milestone="birth">
+                    <div class="milestone-icon">👶</div>
+                    <div class="milestone-content">
+                        <h3>Hello World!</h3>
+                        <p>Born: September 8th, 2024</p>
+                        <div class="birth-stats">
+                            <div class="stat">
+                                <span class="stat-icon">⚖️</span>
+                                <span class="stat-text">3kg</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-icon">📏</span>
+                                <span class="stat-text">50cm</span>
+                            </div>
+                        </div>
+                        <p class="birth-message">Perfect little princess! 👑💕</p>
+                    </div>
+                </div>
+                <div class="milestone-item" data-milestone="smile">
+                    <div class="milestone-icon">😊</div>
+                    <div class="milestone-content">
+                        <h3>First Smile</h3>
+                        <p>Melted our hearts at 6 weeks</p>
+                    </div>
+                </div>
+                <div class="milestone-item" data-milestone="laugh">
+                    <div class="milestone-icon">😄</div>
+                    <div class="milestone-content">
+                        <h3>First Giggle</h3>
+                        <p>Pure joy at 3 months</p>
+                    </div>
+                </div>
+                <div class="milestone-item" data-milestone="rollover">
+                    <div class="milestone-icon">🤸‍♀️</div>
+                    <div class="milestone-content">
+                        <h3>Rolling Over</h3>
+                        <p>Mobile baby at 4 months</p>
+                    </div>
+                </div>
+                <div class="milestone-item" data-milestone="sitting">
+                    <div class="milestone-icon">🪑</div>
+                    <div class="milestone-content">
+                        <h3>Sitting Up</h3>
+                        <p>Independent at 6 months</p>
+                    </div>
+                </div>
+                <div class="milestone-item" data-milestone="crawling">
+                    <div class="milestone-icon">🚼</div>
+                    <div class="milestone-content">
+                        <h3>Crawling</h3>
+                        <p>Adventure begins at 8 months</p>
+                    </div>
+                </div>
+                <div class="milestone-item" data-milestone="walking">
+                    <div class="milestone-icon">🚶‍♀️</div>
+                    <div class="milestone-content">
+                        <h3>First Steps</h3>
+                        <p>Our little walker at 11 months</p>
+                    </div>
+                </div>
+                <div class="milestone-item milestone-birthday" data-milestone="birthday">
+                    <div class="milestone-icon birthday-icon">🎉</div>
+                    <div class="milestone-content">
+                        <h3>First Birthday!</h3>
+                        <p>One amazing year complete!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Photo Gallery Section -->
     <section id="photo-gallery" class="photo-gallery-section">
         <div class="gallery-parallax-bg" data-speed="0.3"></div>
@@ -151,70 +357,70 @@
                 <div class="carousel-wrapper">
                     <div class="carousel-track" id="carouselTrack">
                         <div class="carousel-slide active">
-                            <img src="images/Happy Birthday.jpg" alt="Happy Birthday Celebration" loading="lazy">
+                            <img src="images/Happy Birthday.jpg" alt="Happy Birthday Celebration" loading="eager" decoding="async">
                             <div class="slide-caption">
                                 <h3>🎉 Minh Châu Turns ONE! 🎉</h3>
                                 <p>Join us as we celebrate this incredible milestone</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0842.jpg" alt="Birthday Memory 1" loading="lazy">
+                            <img src="images/LONG0842.jpg" alt="Birthday Memory 1" loading="lazy" decoding="async" decoding="async">
                             <div class="slide-caption">
                                 <h3>✨ First Year Memories ✨</h3>
                                 <p>From tiny newborn to our walking princess</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0865.jpg" alt="Birthday Memory 2" loading="lazy">
+                            <img src="images/LONG0865.jpg" alt="Birthday Memory 2" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>🎂 Our Little Princess 🎂</h3>
                                 <p>365 days of pure joy and wonder</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0879.jpg" alt="Birthday Memory 3" loading="lazy">
+                            <img src="images/LONG0879.jpg" alt="Birthday Memory 3" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>🎈 Fun & Laughter 🎈</h3>
                                 <p>Sharing joy and happiness</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0894.jpg" alt="Birthday Memory 4" loading="lazy">
+                            <img src="images/LONG0894.jpg" alt="Birthday Memory 4" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>💖 Precious Moments 💖</h3>
                                 <p>Memories that last forever</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0917.jpg" alt="Birthday Memory 5" loading="lazy">
+                            <img src="images/LONG0917.jpg" alt="Birthday Memory 5" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>🌟 Magical Times 🌟</h3>
                                 <p>Every smile tells a story</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0963.jpg" alt="Birthday Memory 6" loading="lazy">
+                            <img src="images/LONG0963.jpg" alt="Birthday Memory 6" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>🎊 Party Vibes 🎊</h3>
                                 <p>Dancing and celebrating life</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0972.jpg" alt="Birthday Memory 7" loading="lazy">
+                            <img src="images/LONG0972.jpg" alt="Birthday Memory 7" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>🎁 Gift of Joy 🎁</h3>
                                 <p>The best gifts are moments like these</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG0978.jpg" alt="Birthday Memory 8" loading="lazy">
+                            <img src="images/LONG0978.jpg" alt="Birthday Memory 8" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>🌈 Colorful Celebrations 🌈</h3>
                                 <p>Painting memories with happiness</p>
                             </div>
                         </div>
                         <div class="carousel-slide">
-                            <img src="images/LONG1020.jpg" alt="Birthday Memory 9" loading="lazy">
+                            <img src="images/LONG1020.jpg" alt="Birthday Memory 9" loading="lazy" decoding="async">
                             <div class="slide-caption">
                                 <h3>✨ One Year of Blessings ✨</h3>
                                 <p>Our little miracle has grown so much!</p>

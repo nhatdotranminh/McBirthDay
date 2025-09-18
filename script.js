@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAnimations();
     initializeParallaxEffects();
     initializeCarousel();
+    initializeInteractiveFeatures();
 });
 
 // Initialize party details on the page
@@ -968,6 +969,1149 @@ function initializeScrollAnimations() {
     });
 }
 
+// Interactive Features for Baby's First Birthday
+function initializeInteractiveFeatures() {
+    initializeSpectacularHeroEntrance();
+    initializeBabyDragon();
+    initializeAsianElements();
+    initializeFloatingToys();
+    initializeBalloonGame();
+    initializeInteractiveCake();
+    initializeMouseSparkles();
+    initializeMilestoneAnimations();
+    initializeDragonZodiacSection();
+    addInteractiveSounds();
+}
+
+// Spectacular Hero Entrance Effects
+function initializeSpectacularHeroEntrance() {
+    // Create immediate fireworks on load
+    createHeroFireworks();
+    
+    // Create entrance particles
+    setTimeout(() => {
+        createHeroEntranceParticles();
+    }, 500);
+    
+    // Add interactive announcement card
+    const announcementCard = document.querySelector('.announcement-card');
+    if (announcementCard) {
+        announcementCard.addEventListener('click', function() {
+            createAnnouncementCelebration(this);
+            playDragonSound(3);
+        });
+    }
+    
+    // Add sparkle effects to buttons
+    const spectacularBtns = document.querySelectorAll('.spectacular-btn');
+    spectacularBtns.forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            createButtonSparkles(this);
+        });
+    });
+    
+    // Trigger balloon reduction game update
+    updateBalloonGame();
+}
+
+function createHeroFireworks() {
+    const fireworksContainer = document.getElementById('heroFireworks');
+    if (!fireworksContainer) return;
+    
+    // Create 5 firework bursts
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * (window.innerHeight * 0.6);
+            createFireworkBurst(x, y, fireworksContainer);
+        }, i * 300);
+    }
+}
+
+function createFireworkBurst(x, y, container) {
+    const colors = ['#ff6b9d', '#ffd93d', '#6bcf7f', '#667eea', '#ff6b6b'];
+    
+    for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.width = '6px';
+        particle.style.height = '6px';
+        particle.style.borderRadius = '50%';
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.pointerEvents = 'none';
+        
+        const angle = (i / 12) * Math.PI * 2;
+        const velocity = 100 + Math.random() * 150;
+        const vx = Math.cos(angle) * velocity;
+        const vy = Math.sin(angle) * velocity;
+        
+        container.appendChild(particle);
+        
+        let currentX = x;
+        let currentY = y;
+        let currentVy = vy;
+        const gravity = 300; // pixels per second squared
+        const startTime = Date.now();
+        
+        function animateParticle() {
+            const elapsed = (Date.now() - startTime) / 1000;
+            currentX += vx * 0.016;
+            currentVy += gravity * 0.016;
+            currentY += currentVy * 0.016;
+            
+            particle.style.left = currentX + 'px';
+            particle.style.top = currentY + 'px';
+            particle.style.opacity = Math.max(0, 1 - elapsed / 2);
+            
+            if (elapsed < 2 && particle.style.opacity > 0) {
+                requestAnimationFrame(animateParticle);
+            } else {
+                particle.remove();
+            }
+        }
+        
+        animateParticle();
+    }
+    
+    // Play firework sound
+    playSound('celebration');
+}
+
+function createHeroEntranceParticles() {
+    const particlesContainer = document.getElementById('heroEntranceParticles');
+    if (!particlesContainer) return;
+    
+    const particles = ['✨', '🌟', '💫', '⭐', '🎊', '🎉'];
+    
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = window.innerHeight + 'px';
+            particle.style.fontSize = (1 + Math.random() * 2) + 'rem';
+            particle.style.pointerEvents = 'none';
+            particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+            particle.style.animation = 'magical-particle-rise 4s ease-out forwards';
+            
+            particlesContainer.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 4000);
+        }, i * 200);
+    }
+}
+
+function createAnnouncementCelebration(card) {
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Create dragon celebration
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY, ['🐲', '👑', '✨', '🌟', '🎉'][Math.floor(Math.random() * 5)]);
+        }, i * 100);
+    }
+    
+    showFloatingText('🐲👑 DRAGON PRINCESS! 👑🐲', centerX, centerY - 100, '#ffd700');
+    
+    // Add special sparkle burst
+    setTimeout(() => {
+        for (let i = 0; i < 8; i++) {
+            createParticle(centerX, centerY, '💎');
+        }
+    }, 800);
+}
+
+function createButtonSparkles(button) {
+    const rect = button.getBoundingClientRect();
+    
+    for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+            const sparkle = document.createElement('div');
+            sparkle.style.position = 'fixed';
+            sparkle.style.left = (rect.left + Math.random() * rect.width) + 'px';
+            sparkle.style.top = (rect.top + Math.random() * rect.height) + 'px';
+            sparkle.style.fontSize = '1rem';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.zIndex = '9999';
+            sparkle.textContent = '✨';
+            sparkle.style.animation = 'sparkle-fade 1s ease-out forwards';
+            
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        }, i * 100);
+    }
+}
+
+function updateBalloonGame() {
+    // Update balloon game to work with reduced balloons
+    const balloons = document.querySelectorAll('.game-balloon');
+    let score = 0;
+    
+    balloons.forEach(balloon => {
+        // Remove old event listeners and add new ones
+        const newBalloon = balloon.cloneNode(true);
+        balloon.parentNode.replaceChild(newBalloon, balloon);
+        
+        newBalloon.addEventListener('click', function() {
+            const color = this.getAttribute('data-color');
+            popBalloon(this, color);
+            score++;
+            
+            if (score === 3) { // Changed from 5 to 3
+                showBalloonGameComplete();
+                setTimeout(() => {
+                    respawnBalloons();
+                    score = 0;
+                }, 3000);
+            }
+        });
+    });
+}
+
+// Baby Dragon Interaction
+function initializeBabyDragon() {
+    const dragon = document.getElementById('babyDragon');
+    if (!dragon) return;
+    
+    let dragonClicks = 0;
+    
+    dragon.addEventListener('click', function() {
+        dragonClicks++;
+        createDragonMagic(this);
+        playDragonSound(dragonClicks);
+        
+        // Special celebration every 3 clicks
+        if (dragonClicks % 3 === 0) {
+            createDragonCelebration(this);
+        }
+        
+        // Add celebration effect
+        this.style.animation = 'dragon-celebrate 1s ease-in-out';
+        setTimeout(() => {
+            this.style.animation = '';
+        }, 1000);
+    });
+    
+    dragon.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.3) rotate(15deg)';
+        this.style.filter = 'drop-shadow(0 15px 35px rgba(255,215,0,0.6))';
+        playDragonSound(0); // Gentle hover sound
+    });
+    
+    dragon.addEventListener('mouseleave', function() {
+        this.style.transform = '';
+        this.style.filter = '';
+    });
+    
+    // Make dragon follow mouse slightly
+    document.addEventListener('mousemove', function(e) {
+        if (!dragon) return;
+        const rect = dragon.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const deltaX = (mouseX - centerX) * 0.05;
+        const deltaY = (mouseY - centerY) * 0.05;
+        
+        dragon.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    });
+}
+
+function createDragonMagic(dragon) {
+    const rect = dragon.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Create dragon fire particles
+    for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY, getDragonParticle());
+        }, i * 50);
+    }
+    
+    // Show dragon message
+    showFloatingText('🐉 Little Dragon Magic! 🐉', centerX, centerY - 80, '#ffd700');
+}
+
+function createDragonCelebration(dragon) {
+    const rect = dragon.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Create rainbow dragon celebration
+    const colors = ['#ff6b9d', '#ffd93d', '#6bcf7f', '#667eea', '#ff6b6b'];
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            createColoredParticle(centerX, centerY, '🌈', colors[i % colors.length]);
+        }, i * 100);
+    }
+    
+    showFloatingText('🎊 DRAGON POWER! 🎊', centerX, centerY - 120, '#ff6b9d');
+    playSound('celebration');
+}
+
+function getDragonParticle() {
+    const particles = ['🔥', '✨', '⭐', '💫', '🌟', '💎', '🏮', '🐲'];
+    return particles[Math.floor(Math.random() * particles.length)];
+}
+
+// Asian Cultural Elements Interaction
+function initializeAsianElements() {
+    initializeLanterns();
+    initializeCherryBlossoms();
+    initializeCoins();
+    initializeFans();
+}
+
+function initializeLanterns() {
+    const lanterns = document.querySelectorAll('.floating-lantern');
+    
+    lanterns.forEach(lantern => {
+        lantern.addEventListener('click', function() {
+            createLanternWish(this);
+            playAsianSound('lantern');
+        });
+    });
+}
+
+function initializeCherryBlossoms() {
+    const blossoms = document.querySelectorAll('.cherry-blossoms');
+    
+    blossoms.forEach(blossom => {
+        blossom.addEventListener('click', function() {
+            createBlossomShower(this);
+            playAsianSound('blossom');
+        });
+    });
+}
+
+function initializeCoins() {
+    const coins = document.querySelectorAll('.floating-coin');
+    
+    coins.forEach(coin => {
+        coin.addEventListener('click', function() {
+            createGoldenBurst(this);
+            playAsianSound('coin');
+        });
+    });
+}
+
+function initializeFans() {
+    const fans = document.querySelectorAll('.floating-fan');
+    
+    fans.forEach(fan => {
+        fan.addEventListener('click', function() {
+            createFanBreeze(this);
+            playAsianSound('fan');
+        });
+    });
+}
+
+function createLanternWish(lantern) {
+    const rect = lantern.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 8; i++) {
+        createParticle(centerX, centerY, '🎋');
+    }
+    
+    showFloatingText('🏮 Good Fortune! 🏮', centerX, centerY - 60, '#ff0000');
+}
+
+function createBlossomShower(blossom) {
+    const rect = blossom.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY, '🌸');
+        }, i * 100);
+    }
+    
+    showFloatingText('🌸 Beauty & Growth! 🌸', centerX, centerY - 60, '#ffb6c1');
+}
+
+function createGoldenBurst(coin) {
+    const rect = coin.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 10; i++) {
+        createParticle(centerX, centerY, ['🪙', '💰', '✨'][Math.floor(Math.random() * 3)]);
+    }
+    
+    showFloatingText('💰 Prosperity! 💰', centerX, centerY - 60, '#ffd700');
+}
+
+function createFanBreeze(fan) {
+    const rect = fan.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY, ['💨', '🌺', '🍃'][Math.floor(Math.random() * 3)]);
+        }, i * 150);
+    }
+    
+    showFloatingText('🌺 Gentle Breeze! 🌺', centerX, centerY - 60, '#ff69b4');
+}
+
+// Dragon Zodiac Section Interactions
+function initializeDragonZodiacSection() {
+    const zodiacCards = document.querySelectorAll('.element-card');
+    const dragonCard = document.querySelector('.dragon-year-card');
+    const zodiacDragon = document.querySelector('.zodiac-dragon');
+    
+    // Zodiac dragon interaction
+    if (zodiacDragon) {
+        zodiacDragon.addEventListener('click', function() {
+            createZodiacCelebration(this);
+            playDragonSound(5); // Special zodiac sound
+        });
+    }
+    
+    // Element cards interaction
+    zodiacCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const cardType = this.className.includes('lantern') ? 'lantern' :
+                            this.className.includes('blossom') ? 'blossom' : 'coin';
+            createElementCelebration(this, cardType);
+            playAsianSound(cardType);
+        });
+    });
+    
+    // Dragon card special interaction
+    if (dragonCard) {
+        dragonCard.addEventListener('click', function() {
+            createDragonYearCelebration(this);
+            playSound('celebration');
+        });
+    }
+    
+    // Dragon stats interaction
+    const dragonStats = document.querySelectorAll('.dragon-stat');
+    dragonStats.forEach(stat => {
+        stat.addEventListener('click', function() {
+            createDragonStatCelebration(this);
+            playDragonSound(Math.floor(Math.random() * 5));
+        });
+    });
+}
+
+function createZodiacCelebration(dragon) {
+    const rect = dragon.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Create zodiac power burst
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY, ['🐲', '⚡', '🔥', '✨', '💫'][Math.floor(Math.random() * 5)]);
+        }, i * 75);
+    }
+    
+    showFloatingText('🐲 YEAR OF THE DRAGON! 🐲', centerX, centerY - 100, '#ffd700');
+}
+
+function createElementCelebration(card, type) {
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const particles = {
+        lantern: ['🏮', '✨', '🎋'],
+        blossom: ['🌸', '🌺', '🌼'],
+        coin: ['🪙', '💰', '💎']
+    };
+    
+    for (let i = 0; i < 8; i++) {
+        createParticle(centerX, centerY, particles[type][Math.floor(Math.random() * 3)]);
+    }
+}
+
+function createDragonYearCelebration(card) {
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Rainbow dragon year celebration
+    const dragonElements = ['🐉', '🐲', '🔥', '⚡', '🌈', '✨', '💫', '🌟'];
+    for (let i = 0; i < 25; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY, dragonElements[Math.floor(Math.random() * dragonElements.length)]);
+        }, i * 100);
+    }
+    
+    showFloatingText('🎊 BORN IN THE YEAR OF THE DRAGON! 🎊', centerX, centerY - 150, '#ff6b9d');
+}
+
+// Floating Toys Interaction
+function initializeFloatingToys() {
+    const toys = document.querySelectorAll('.floating-toy');
+    
+    toys.forEach(toy => {
+        toy.addEventListener('click', function() {
+            const toyType = this.getAttribute('data-toy');
+            createToyInteraction(this, toyType);
+            playToySound(toyType);
+            
+            // Add celebration effect
+            this.style.animation = 'toy-bounce 0.6s ease';
+            setTimeout(() => {
+                this.style.animation = '';
+            }, 600);
+        });
+        
+        toy.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.2) rotate(5deg)';
+            this.style.filter = 'drop-shadow(0 10px 25px rgba(0,0,0,0.3))';
+        });
+        
+        toy.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.filter = '';
+        });
+    });
+}
+
+function createToyInteraction(toy, toyType) {
+    const rect = toy.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Create particle effect
+    for (let i = 0; i < 8; i++) {
+        createParticle(centerX, centerY, getToyParticle(toyType));
+    }
+    
+    // Show toy message
+    showToyMessage(toyType, centerX, centerY);
+}
+
+function getToyParticle(toyType) {
+    const particles = {
+        bear: ['🧸', '❤️', '🤗'],
+        blocks: ['🧩', '🔷', '🔸'],
+        rattle: ['🎵', '🎶', '♪'],
+        bottle: ['🍼', '💕', '🤱'],
+        duck: ['🦆', '💦', '🌊'],
+        pacifier: ['🍭', '😴', '💤']
+    };
+    const options = particles[toyType] || ['✨', '⭐', '🌟'];
+    return options[Math.floor(Math.random() * options.length)];
+}
+
+// Balloon Popping Game
+function initializeBalloonGame() {
+    const balloons = document.querySelectorAll('.game-balloon');
+    let score = 0;
+    
+    balloons.forEach(balloon => {
+        balloon.addEventListener('click', function() {
+            const color = this.getAttribute('data-color');
+            popBalloon(this, color);
+            score++;
+            
+            if (score === 5) {
+                showBalloonGameComplete();
+                setTimeout(() => {
+                    respawnBalloons();
+                    score = 0;
+                }, 3000);
+            }
+        });
+    });
+}
+
+function popBalloon(balloon, color) {
+    const rect = balloon.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Pop animation
+    balloon.style.animation = 'balloon-pop 0.3s ease-out forwards';
+    balloon.style.transform = 'scale(0)';
+    
+    // Create pop particles
+    for (let i = 0; i < 12; i++) {
+        createParticle(centerX, centerY, '🎊');
+    }
+    
+    // Play pop sound
+    playSound('pop');
+    
+    // Show points
+    showFloatingText('+10', centerX, centerY - 50, '#ff6b9d');
+    
+    // Hide balloon temporarily
+    setTimeout(() => {
+        balloon.style.display = 'none';
+    }, 300);
+}
+
+function respawnBalloons() {
+    const balloons = document.querySelectorAll('.game-balloon');
+    balloons.forEach((balloon, index) => {
+        setTimeout(() => {
+            balloon.style.display = 'block';
+            balloon.style.transform = '';
+            balloon.style.animation = '';
+        }, index * 200);
+    });
+}
+
+// Interactive Birthday Cake
+function initializeInteractiveCake() {
+    const cake = document.getElementById('interactiveCake');
+    const candles = document.querySelectorAll('.candle');
+    let candlesLit = candles.length;
+    
+    cake.addEventListener('click', function() {
+        if (candlesLit > 0) {
+            blowOutCandles();
+        } else {
+            relightCandles();
+        }
+    });
+}
+
+function blowOutCandles() {
+    const candles = document.querySelectorAll('.candle');
+    const particles = document.getElementById('wishParticles');
+    
+    candles.forEach((candle, index) => {
+        setTimeout(() => {
+            const flame = candle.querySelector('.flame');
+            flame.style.opacity = '0';
+            flame.style.transform = 'scale(0)';
+            
+            // Create smoke effect
+            createSmokeEffect(candle);
+        }, index * 100);
+    });
+    
+    // Show wish particles
+    setTimeout(() => {
+        createWishEffect();
+        showFloatingText('🌠 Make a wish! 🌠', window.innerWidth / 2, window.innerHeight / 2, '#ffd93d');
+        playSound('wish');
+    }, 500);
+    
+    // Update instruction
+    const instruction = document.querySelector('.cake-instruction p');
+    instruction.textContent = '✨ Wish made! Click to relight! ✨';
+}
+
+function relightCandles() {
+    const candles = document.querySelectorAll('.candle');
+    
+    candles.forEach((candle, index) => {
+        setTimeout(() => {
+            const flame = candle.querySelector('.flame');
+            flame.style.opacity = '1';
+            flame.style.transform = 'scale(1)';
+        }, index * 100);
+    });
+    
+    const instruction = document.querySelector('.cake-instruction p');
+    instruction.textContent = '🌬️ Click to blow out the candle! 🌬️';
+    
+    playSound('light');
+}
+
+// Mouse Sparkle Trail
+function initializeMouseSparkles() {
+    const sparkleTrail = document.querySelector('.sparkle-trail');
+    let mouseX = 0;
+    let mouseY = 0;
+    
+    document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Create sparkle every few pixels
+        if (Math.random() > 0.8) {
+            createSparkle(mouseX, mouseY);
+        }
+    });
+    
+    function createSparkle(x, y) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.textContent = ['✨', '⭐', '🌟', '💫'][Math.floor(Math.random() * 4)];
+        sparkle.style.left = x + 'px';
+        sparkle.style.top = y + 'px';
+        sparkleTrail.appendChild(sparkle);
+        
+        setTimeout(() => {
+            sparkle.remove();
+        }, 1000);
+    }
+}
+
+// Milestone Animations
+function initializeMilestoneAnimations() {
+    const milestones = document.querySelectorAll('.milestone-item');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const milestone = entry.target;
+                const milestoneType = milestone.getAttribute('data-milestone');
+                
+                // Add special animation
+                milestone.style.animation = 'milestone-celebrate 1s ease-out';
+                
+                // Create celebration effect
+                if (milestoneType === 'birthday') {
+                    setTimeout(() => {
+                        createBirthdayExplosion(milestone);
+                    }, 500);
+                }
+                
+                // Add floating particles
+                createMilestoneParticles(milestone);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    milestones.forEach(milestone => {
+        observer.observe(milestone);
+        
+        milestone.addEventListener('click', function() {
+            const milestoneType = this.getAttribute('data-milestone');
+            createMilestoneInteraction(this, milestoneType);
+        });
+    });
+    
+    // Add birth stats interactivity
+    const birthStats = document.querySelectorAll('.stat');
+    birthStats.forEach(stat => {
+        stat.addEventListener('click', function() {
+            createBirthStatCelebration(this);
+            playSound('celebration');
+        });
+    });
+}
+
+// Helper Functions
+function createParticle(x, y, emoji) {
+    const particle = document.createElement('div');
+    particle.style.position = 'fixed';
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    particle.style.fontSize = '1.5rem';
+    particle.style.pointerEvents = 'none';
+    particle.style.zIndex = '9999';
+    particle.textContent = emoji;
+    
+    const angle = Math.random() * Math.PI * 2;
+    const velocity = 50 + Math.random() * 100;
+    const gravity = 0.5;
+    let vx = Math.cos(angle) * velocity;
+    let vy = Math.sin(angle) * velocity;
+    
+    document.body.appendChild(particle);
+    
+    function animate() {
+        x += vx;
+        y += vy;
+        vy += gravity;
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.opacity = Math.max(0, 1 - y / window.innerHeight);
+        
+        if (y < window.innerHeight && parseFloat(particle.style.opacity) > 0) {
+            requestAnimationFrame(animate);
+        } else {
+            particle.remove();
+        }
+    }
+    
+    animate();
+}
+
+function showFloatingText(text, x, y, color = '#ff6b9d') {
+    const textElement = document.createElement('div');
+    textElement.style.position = 'fixed';
+    textElement.style.left = x + 'px';
+    textElement.style.top = y + 'px';
+    textElement.style.color = color;
+    textElement.style.fontSize = '2rem';
+    textElement.style.fontWeight = 'bold';
+    textElement.style.pointerEvents = 'none';
+    textElement.style.zIndex = '9999';
+    textElement.style.textShadow = '2px 2px 4px rgba(0,0,0,0.3)';
+    textElement.textContent = text;
+    textElement.style.animation = 'float-up-fade 2s ease-out forwards';
+    
+    document.body.appendChild(textElement);
+    
+    setTimeout(() => {
+        textElement.remove();
+    }, 2000);
+}
+
+function createWishEffect() {
+    const colors = ['#ff6b9d', '#ffd93d', '#6bcf7f', '#667eea'];
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = (window.innerWidth / 2) + 'px';
+            particle.style.top = (window.innerHeight / 2) + 'px';
+            particle.style.width = '10px';
+            particle.style.height = '10px';
+            particle.style.borderRadius = '50%';
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            
+            const angle = (i / 20) * Math.PI * 2;
+            const distance = 100 + Math.random() * 200;
+            const targetX = Math.cos(angle) * distance;
+            const targetY = Math.sin(angle) * distance;
+            
+            particle.style.animation = `wish-particle 2s ease-out forwards`;
+            particle.style.setProperty('--target-x', targetX + 'px');
+            particle.style.setProperty('--target-y', targetY + 'px');
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 2000);
+        }, i * 50);
+    }
+}
+
+// Sound Effects (Web Audio API)
+function addInteractiveSounds() {
+    // Create audio context for sound effects
+    window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Sound library
+    window.sounds = {
+        toy: () => playTone(523.25, 0.1), // C5
+        pop: () => playTone(659.25, 0.05), // E5
+        wish: () => playTone(783.99, 0.2), // G5
+        light: () => playTone(440, 0.1), // A4
+        celebration: () => playCelebrationChord()
+    };
+}
+
+function playSound(soundName) {
+    if (window.sounds && window.sounds[soundName]) {
+        window.sounds[soundName]();
+    }
+}
+
+function playTone(frequency, duration) {
+    if (!window.audioContext) return;
+    
+    const oscillator = window.audioContext.createOscillator();
+    const gainNode = window.audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(window.audioContext.destination);
+    
+    oscillator.frequency.value = frequency;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.1, window.audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioContext.currentTime + duration);
+    
+    oscillator.start(window.audioContext.currentTime);
+    oscillator.stop(window.audioContext.currentTime + duration);
+}
+
+function playToySound(toyType) {
+    playSound('toy');
+}
+
+function playDragonSound(clickCount) {
+    // Different dragon sounds based on interaction
+    const frequencies = [523.25, 659.25, 783.99, 987.77, 1174.66]; // C5, E5, G5, B5, D6
+    const frequency = frequencies[clickCount % frequencies.length];
+    playTone(frequency, 0.2);
+}
+
+function playAsianSound(elementType) {
+    const sounds = {
+        lantern: 880,    // A5 - warm, glowing
+        blossom: 1174.66, // D6 - light, delicate  
+        coin: 698.46,    // F5 - metallic, prosperity
+        fan: 1046.50     // C6 - airy, gentle
+    };
+    playTone(sounds[elementType] || 440, 0.15);
+}
+
+function createColoredParticle(x, y, emoji, color) {
+    const particle = document.createElement('div');
+    particle.style.position = 'fixed';
+    particle.style.left = x + 'px';
+    particle.style.top = y + 'px';
+    particle.style.fontSize = '1.5rem';
+    particle.style.pointerEvents = 'none';
+    particle.style.zIndex = '9999';
+    particle.style.color = color;
+    particle.textContent = emoji;
+    
+    const angle = Math.random() * Math.PI * 2;
+    const velocity = 50 + Math.random() * 100;
+    const gravity = 0.5;
+    let vx = Math.cos(angle) * velocity;
+    let vy = Math.sin(angle) * velocity;
+    
+    document.body.appendChild(particle);
+    
+    function animate() {
+        x += vx;
+        y += vy;
+        vy += gravity;
+        
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.opacity = Math.max(0, 1 - y / window.innerHeight);
+        
+        if (y < window.innerHeight && parseFloat(particle.style.opacity) > 0) {
+            requestAnimationFrame(animate);
+        } else {
+            particle.remove();
+        }
+    }
+    
+    animate();
+}
+
+// Missing helper functions
+function showToyMessage(toyType, x, y) {
+    const messages = {
+        bear: 'Teddy Bear Hugs! 🧸',
+        blocks: 'Building Fun! 🧩',
+        rattle: 'Shake It! 🎵',
+        bottle: 'Feeding Time! 🍼',
+        duck: 'Rubber Ducky! 🦆',
+        pacifier: 'Sweet Dreams! 🍭'
+    };
+    showFloatingText(messages[toyType] || 'So Fun!', x, y - 50, '#ff6b9d');
+}
+
+function showBalloonGameComplete() {
+    showFloatingText('🎉 All Balloons Popped! 🎉', window.innerWidth / 2, window.innerHeight / 2, '#ffd93d');
+    playSound('celebration');
+}
+
+function createSmokeEffect(candle) {
+    const rect = candle.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top;
+    
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            createParticle(x, y, '💨');
+        }, i * 100);
+    }
+}
+
+function createBirthdayExplosion(milestone) {
+    const rect = milestone.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 15; i++) {
+        createParticle(centerX, centerY, ['🎉', '🎊', '✨', '🌟'][Math.floor(Math.random() * 4)]);
+    }
+    
+    playSound('celebration');
+}
+
+function createMilestoneParticles(milestone) {
+    const rect = milestone.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+            createParticle(centerX, centerY, ['⭐', '✨', '💫'][Math.floor(Math.random() * 3)]);
+        }, i * 200);
+    }
+}
+
+function createMilestoneInteraction(milestone, milestoneType) {
+    const rect = milestone.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const messages = {
+        birth: 'Hello World! 👶',
+        smile: 'First Smile! 😊',
+        laugh: 'Giggles! 😄',
+        rollover: 'Rolling! 🤸‍♀️',
+        sitting: 'Sitting Up! 🪑',
+        crawling: 'Crawling! 🚼',
+        walking: 'First Steps! 🚶‍♀️',
+        birthday: 'Happy 1st Birthday! 🎉'
+    };
+    
+    showFloatingText(messages[milestoneType] || 'Milestone!', centerX, centerY - 100, '#6bcf7f');
+    
+    for (let i = 0; i < 8; i++) {
+        createParticle(centerX, centerY, '🌟');
+    }
+}
+
+function playCelebrationChord() {
+    // Play a happy chord
+    playTone(523.25, 0.3); // C5
+    setTimeout(() => playTone(659.25, 0.3), 50); // E5
+    setTimeout(() => playTone(783.99, 0.3), 100); // G5
+}
+
+function createBirthStatCelebration(stat) {
+    const rect = stat.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Determine if it's weight or height stat
+    const isWeight = stat.querySelector('.stat-text').textContent.includes('kg');
+    const isHeight = stat.querySelector('.stat-text').textContent.includes('cm');
+    
+    if (isWeight) {
+        // Weight celebration - golden particles
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                createParticle(centerX, centerY, ['⚖️', '💖', '👶', '✨', '🌟'][Math.floor(Math.random() * 5)]);
+            }, i * 100);
+        }
+        showFloatingText('🥰 Perfect Weight! 🥰', centerX, centerY - 80, '#ffd700');
+    } else if (isHeight) {
+        // Height celebration - growth particles
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                createParticle(centerX, centerY, ['📏', '🌱', '👶', '💕', '🌈'][Math.floor(Math.random() * 5)]);
+            }, i * 100);
+        }
+        showFloatingText('🌟 Perfect Size! 🌟', centerX, centerY - 80, '#ff6b9d');
+    }
+    
+    // Add special dragon celebration
+    setTimeout(() => {
+        createParticle(centerX, centerY, '🐉');
+        showFloatingText('Little Dragon Stats! 🐲', centerX, centerY - 120, '#667eea');
+    }, 500);
+}
+
+function createDragonStatCelebration(stat) {
+    const rect = stat.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Determine if it's weight or height stat in dragon section
+    const statText = stat.textContent.trim();
+    const isWeight = statText.includes('kg');
+    const isHeight = statText.includes('cm');
+    
+    if (isWeight) {
+        // Dragon weight celebration
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                createParticle(centerX, centerY, ['🐲', '⚖️', '💎', '✨', '🌟'][Math.floor(Math.random() * 5)]);
+            }, i * 80);
+        }
+        showFloatingText('🐲 Strong Dragon! 🐲', centerX, centerY - 90, '#ffd700');
+    } else if (isHeight) {
+        // Dragon height celebration
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                createParticle(centerX, centerY, ['🐉', '📏', '🌈', '💫', '⭐'][Math.floor(Math.random() * 5)]);
+            }, i * 80);
+        }
+        showFloatingText('🐉 Mighty Dragon! 🐉', centerX, centerY - 90, '#ff6b9d');
+    }
+    
+    // Add special dragon power burst
+    setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+            createParticle(centerX, centerY, '🔥');
+        }
+        showFloatingText('Dragon Power Stats! ⚡', centerX, centerY - 130, '#667eea');
+    }, 800);
+}
+
+// Add custom CSS for new animations
+function addInteractiveCSS() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes balloon-pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        @keyframes float-up-fade {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-100px); }
+        }
+        
+        @keyframes milestone-celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(2deg); }
+            75% { transform: scale(1.05) rotate(-2deg); }
+        }
+        
+        @keyframes wish-particle {
+            0% { 
+                opacity: 1; 
+                transform: translate(0, 0) scale(1); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translate(var(--target-x), var(--target-y)) scale(0); 
+            }
+        }
+        
+        @keyframes magical-particle-rise {
+            0% { 
+                opacity: 0; 
+                transform: translateY(0px) scale(0) rotate(0deg); 
+            }
+            20% { 
+                opacity: 1; 
+                transform: translateY(-200px) scale(1) rotate(180deg); 
+            }
+            80% { 
+                opacity: 1; 
+                transform: translateY(-600px) scale(1.2) rotate(540deg); 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateY(-800px) scale(0) rotate(720deg); 
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Initialize interactive CSS
+document.addEventListener('DOMContentLoaded', addInteractiveCSS);
+
 // Export functions for potential external use
 window.partyApp = {
     shareParty,
@@ -976,5 +2120,6 @@ window.partyApp = {
     trackEvent,
     initializeParallaxEffects,
     addDynamicFloatingElements,
-    initializeCarousel
+    initializeCarousel,
+    initializeInteractiveFeatures
 };

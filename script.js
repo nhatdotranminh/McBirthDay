@@ -19,12 +19,22 @@ const PARTY_CONFIG = {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔧 DEBUG: DOM Content Loaded - Starting initialization...');
     initializePartyDetails();
     initializeEventListeners();
     initializeAnimations();
     initializeParallaxEffects();
     initializeCarousel();
     initializeInteractiveFeatures();
+    
+    // Add a delay to ensure all elements are rendered
+    setTimeout(() => {
+        initializeMagicalFeatures();
+        
+        // Add debug buttons for testing
+    }, 100);
+    
+    console.log('🔧 DEBUG: Initial setup complete');
 });
 
 // Initialize party details on the page
@@ -2109,6 +2119,977 @@ function addInteractiveCSS() {
     document.head.appendChild(style);
 }
 
+// ===================================================
+// ✨ MAGICAL NEW FEATURES JAVASCRIPT ✨
+// ===================================================
+
+// ===== TIME CAPSULE MESSAGES =====
+function initializeTimeCapsule() {
+    const bottle = document.getElementById('timeCapsuleBottle');
+    const modal = document.getElementById('timeCapsuleModal');
+    const closeBtn = document.getElementById('closeTimeCapsule');
+    const saveBtn = document.getElementById('saveMessage');
+    const messageInput = document.getElementById('timeCapsuleMessage');
+    const nameInput = document.getElementById('senderName');
+    const savedMessagesContainer = document.getElementById('savedMessages');
+
+    if (!bottle || !modal) return;
+
+    // Open modal when bottle is clicked
+    bottle.addEventListener('click', () => {
+        modal.classList.add('active');
+        loadSavedMessages();
+        playTone(523.25, 0.2); // C5 note
+    });
+
+    // Close modal
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        playTone(391.995, 0.2); // G4 note
+    }
+
+    // Save message
+    saveBtn.addEventListener('click', saveMessage);
+
+    function saveMessage() {
+        const message = messageInput.value.trim();
+        const name = nameInput.value.trim() || 'Anonymous';
+
+        if (!message) {
+            showNotification('Please write a message for Minh Châu! 💕', 'error');
+            return;
+        }
+
+        const messageData = {
+            text: message,
+            author: name,
+            date: new Date().toLocaleDateString(),
+            timestamp: Date.now()
+        };
+
+        // Save to localStorage
+        let savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
+        savedMessages.push(messageData);
+        localStorage.setItem('timeCapsuleMessages', JSON.stringify(savedMessages));
+
+        // Create celebration effect
+        createTimeCapsuleCelebration();
+
+        // Clear inputs and reload messages
+        messageInput.value = '';
+        nameInput.value = '';
+        loadSavedMessages();
+
+        showNotification(`Message saved for Minh Châu's future! ✨`, 'success');
+        playTone(659.25, 0.3); // E5 note
+    }
+
+    function loadSavedMessages() {
+        const savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
+        savedMessagesContainer.innerHTML = '';
+
+        if (savedMessages.length === 0) {
+            savedMessagesContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">No messages yet. Be the first to leave one! 💌</p>';
+            return;
+        }
+
+        savedMessages.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'saved-message';
+            messageDiv.innerHTML = `
+                <div class="message-text">"${msg.text}"</div>
+                <div class="message-author">- ${msg.author} (${msg.date})</div>
+            `;
+            savedMessagesContainer.appendChild(messageDiv);
+        });
+    }
+
+    function createTimeCapsuleCelebration() {
+        for (let i = 0; i < 15; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    right: 60px;
+                    top: 25%;
+                    width: 20px;
+                    height: 20px;
+                    background: ${['💌', '💝', '✨', '💫', '🌟'][Math.floor(Math.random() * 5)]};
+                    font-size: 20px;
+                    pointer-events: none;
+                    z-index: 1000;
+                    animation: time-capsule-particle 2s ease-out forwards;
+                `;
+                document.body.appendChild(particle);
+
+                setTimeout(() => particle.remove(), 2000);
+            }, i * 100);
+        }
+    }
+
+    // Add CSS for time capsule particles
+    if (!document.getElementById('time-capsule-css')) {
+        const style = document.createElement('style');
+        style.id = 'time-capsule-css';
+        style.textContent = `
+            @keyframes time-capsule-particle {
+                0% { transform: translate(0, 0) scale(1); opacity: 1; }
+                50% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(1.2); opacity: 1; }
+                100% { transform: translate(${Math.random() * 400 - 200}px, ${Math.random() * 400 - 200}px) scale(0); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// ===== INTERACTIVE STORY BOOK =====
+function initializeStoryBook() {
+    const openBookBtn = document.getElementById('openBook');
+    const bookCover = document.querySelector('.book-cover');
+    const storyPages = document.getElementById('storyPages');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    const pageIndicator = document.getElementById('pageIndicator');
+
+    let currentPage = 1;
+    const totalPages = 4;
+
+    if (!openBookBtn || !bookCover || !storyPages) {
+        console.error('❌ Story Book: Missing required elements!');
+        return;
+    }
+
+    // Ensure button is fully clickable
+    openBookBtn.style.cssText = `
+        ${openBookBtn.style.cssText || ''}
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        z-index: 9999 !important;
+        position: relative !important;
+    `;
+
+    // Open book - multiple event listeners for reliability
+    openBookBtn.addEventListener('click', function(e) {
+        console.log('📖 Story book button clicked via click event!');
+        e.preventDefault();
+        e.stopPropagation();
+        openBook();
+    });
+    
+    openBookBtn.addEventListener('touchstart', function(e) {
+        console.log('📖 Story book button touched!');
+        e.preventDefault();
+        e.stopPropagation();
+        openBook();
+    });
+    
+    // Also add direct onclick as backup
+    openBookBtn.onclick = function(e) {
+        console.log('📖 Story book button clicked via onclick!');
+        e.preventDefault();
+        e.stopPropagation();
+        openBook();
+        return false;
+    };
+
+    function openBook() {
+        console.log('📖 openBook() function called!');
+        console.log('📖 Elements found:', { bookCover: !!bookCover, storyPages: !!storyPages });
+        
+        bookCover.classList.add('opened');
+        storyPages.classList.add('active');
+        
+        // Show navigation when story is opened
+        const storyNav = document.querySelector('.story-nav');
+        if (storyNav) {
+            console.log('📖 Story navigation found, adding active class');
+            storyNav.classList.add('active');
+            storyNav.style.display = 'flex';
+            storyNav.style.opacity = '1';
+        } else {
+            console.log('📖 Story navigation not found!');
+        }
+        
+        playTone(523.25, 0.3); // C5 note
+        createBookOpenEffect();
+        updatePageDisplay();
+        
+        // Show success notification
+        showNotification('Story book opened! 📖✨', 'success');
+        console.log('📖 Story book opened successfully!');
+    }
+
+    // Navigation - add event listeners even if hidden initially
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => changePage(currentPage - 1));
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => changePage(currentPage + 1));
+    }
+    
+    // Close story functionality
+    const closeBtn = document.getElementById('closeStory');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeBook);
+    }
+
+    function closeBook() {
+        bookCover.classList.remove('opened');
+        storyPages.classList.remove('active');
+        
+        // Hide navigation when story is closed
+        const storyNav = document.querySelector('.story-nav');
+        if (storyNav) {
+            storyNav.classList.remove('active');
+        }
+        
+        // Reset to first page
+        currentPage = 1;
+        updatePageDisplay();
+        
+        playTone(391.995, 0.3); // G4 note (lower than open)
+    }
+
+    function changePage(newPage) {
+        if (newPage < 1 || newPage > totalPages) return;
+
+        // Hide current page
+        const currentPageElement = document.querySelector(`.story-page[data-page="${currentPage}"]`);
+        if (currentPageElement) {
+            currentPageElement.classList.remove('active');
+        }
+
+        currentPage = newPage;
+
+        // Show new page
+        const newPageElement = document.querySelector(`.story-page[data-page="${currentPage}"]`);
+        if (newPageElement) {
+            newPageElement.classList.add('active');
+        }
+
+        updatePageDisplay();
+        createPageTurnEffect();
+        playTone(392 + (currentPage * 50), 0.2); // Different note for each page
+    }
+
+    function updatePageDisplay() {
+        pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+    }
+
+    function createBookOpenEffect() {
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    width: 15px;
+                    height: 15px;
+                    background: ${['📖', '✨', '🌟', '💫', '🎭'][Math.floor(Math.random() * 5)]};
+                    font-size: 15px;
+                    pointer-events: none;
+                    z-index: 100;
+                    animation: book-open-particle 2s ease-out forwards;
+                `;
+                document.querySelector('.story-book').appendChild(particle);
+
+                setTimeout(() => particle.remove(), 2000);
+            }, i * 50);
+        }
+    }
+
+    function createPageTurnEffect() {
+        const storyBook = document.querySelector('.story-book');
+        for (let i = 0; i < 5; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: absolute;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                width: 10px;
+                height: 10px;
+                background: ✨;
+                font-size: 10px;
+                pointer-events: none;
+                z-index: 100;
+                animation: page-turn-sparkle 1s ease-out forwards;
+            `;
+            storyBook.appendChild(particle);
+
+            setTimeout(() => particle.remove(), 1000);
+        }
+    }
+
+    // Add CSS for story book effects
+    if (!document.getElementById('story-book-css')) {
+        const style = document.createElement('style');
+        style.id = 'story-book-css';
+        style.textContent = `
+            @keyframes book-open-particle {
+                0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+                100% { transform: translate(${Math.random() * 300 - 150}px, ${Math.random() * 300 - 150}px) scale(0); opacity: 0; }
+            }
+            @keyframes page-turn-sparkle {
+                0% { transform: scale(1) rotate(0deg); opacity: 1; }
+                100% { transform: scale(0) rotate(360deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// ===== GROWING MEMORY GARDEN =====
+function initializeMemoryGarden() {
+    console.log('🌸 Initializing Memory Garden...');
+    
+    const flowerBed = document.getElementById('flowerBed');
+    const butterfliesContainer = document.getElementById('butterfliesContainer');
+    const flowerCountEl = document.getElementById('flowerCount');
+    const butterflyCountEl = document.getElementById('butterflyCount');
+    const memoryCountEl = document.getElementById('memoryCount');
+    
+    let flowerCount = parseInt(localStorage.getItem('gardenFlowerCount') || '0');
+    let butterflyCount = 0;
+    let memoryCount = parseInt(localStorage.getItem('gardenMemoryCount') || '0');
+    
+    const flowerTypes = ['🌸', '🌺', '🌻', '🌷', '🌹', '🏵️', '🌼', '💐'];
+    const butterflyTypes = ['🦋', '🦄', '🧚‍♀️'];
+    
+    if (!flowerBed) {
+        console.error('❌ Memory Garden: Missing flower bed element!');
+        return;
+    }
+    
+    // Initialize garden
+    updateGardenStats();
+    loadExistingFlowers();
+    initializeCarouselPhotoClicks();
+    
+    function initializeCarouselPhotoClicks() {
+        // Add click handlers to all carousel images
+        const carouselImages = document.querySelectorAll('.carousel-slide img');
+        console.log('🌸 Found carousel images:', carouselImages.length);
+        
+        carouselImages.forEach((img, index) => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent carousel navigation
+                plantFlowerFromPhoto(img, index);
+            });
+            
+            // Add visual indication that photos are clickable
+            img.style.cursor = 'pointer';
+            img.title = 'Click to plant a flower for this memory! 🌸';
+        });
+    }
+    
+    function plantFlowerFromPhoto(imgElement, photoIndex) {
+        console.log('🌸 Planting flower from photo:', photoIndex);
+        
+        // Check if already planted
+        const existingFlower = flowerBed.querySelector(`[data-photo="${photoIndex}"]`);
+        if (existingFlower) {
+            // Animate existing flower
+            existingFlower.style.animation = 'flower-celebrate 1s ease-out';
+            showNotification('This memory is already blooming in your garden! 🌸', 'info');
+            return;
+        }
+        
+        // Create new flower
+        const flower = document.createElement('div');
+        flower.className = 'garden-flower';
+        flower.setAttribute('data-photo', photoIndex);
+        
+        // Choose flower type based on photo index
+        const flowerType = flowerTypes[photoIndex % flowerTypes.length];
+        flower.textContent = flowerType;
+        
+        // Random position in flower bed
+        const x = 10 + Math.random() * 80; // 10% to 90% width
+        const y = 20 + Math.random() * 60; // 20% to 80% height
+        
+        flower.style.cssText = `
+            left: ${x}%;
+            top: ${y}%;
+            animation-delay: ${Math.random() * 0.5}s;
+        `;
+        
+        // Add to flower bed
+        flowerBed.appendChild(flower);
+        
+        // Animate flower growth
+        setTimeout(() => {
+            flower.classList.add('bloomed');
+        }, 100);
+        
+        // Update stats
+        flowerCount++;
+        memoryCount++;
+        updateGardenStats();
+        saveGardenProgress();
+        
+        // Create planting effect
+        createPlantingEffect(flower);
+        
+        // Spawn butterfly after flower blooms
+        setTimeout(() => {
+            if (Math.random() < 0.7) { // 70% chance
+                spawnButterfly(flower);
+            }
+        }, 2000);
+        
+        // Show success message
+        showNotification(`Beautiful ${flowerType} planted for this memory! 🌸`, 'success');
+        playTone(523.25 + (photoIndex * 25), 0.3);
+        
+        // Add click handler to flower
+        flower.addEventListener('click', () => {
+            createFlowerClickEffect(flower);
+            showImageFromFlower(imgElement);
+        });
+    }
+    
+    function createPlantingEffect(flower) {
+        const rect = flower.getBoundingClientRect();
+        const gardenRect = flowerBed.getBoundingClientRect();
+        
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    left: ${flower.style.left};
+                    top: ${flower.style.top};
+                    width: 15px;
+                    height: 15px;
+                    background: ${['✨', '🌟', '💫', '🌸'][Math.floor(Math.random() * 4)]};
+                    font-size: 15px;
+                    pointer-events: none;
+                    z-index: 100;
+                    animation: planting-particle 1.5s ease-out forwards;
+                `;
+                flowerBed.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1500);
+            }, i * 50);
+        }
+    }
+    
+    function createFlowerClickEffect(flower) {
+        for (let i = 0; i < 8; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    left: ${flower.style.left};
+                    top: ${flower.style.top};
+                    width: 12px;
+                    height: 12px;
+                    background: ${flower.textContent};
+                    font-size: 12px;
+                    pointer-events: none;
+                    z-index: 100;
+                    animation: flower-click-burst 1s ease-out forwards;
+                `;
+                flowerBed.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }, i * 40);
+        }
+    }
+    
+    function spawnButterfly(targetFlower) {
+        const butterfly = document.createElement('div');
+        butterfly.className = 'garden-butterfly';
+        butterfly.textContent = butterflyTypes[Math.floor(Math.random() * butterflyTypes.length)];
+        
+        butterfly.style.cssText = `
+            left: -50px;
+            top: ${20 + Math.random() * 60}%;
+            animation-delay: ${Math.random() * 2}s;
+            animation-duration: ${6 + Math.random() * 4}s;
+        `;
+        
+        butterfliesContainer.appendChild(butterfly);
+        
+        setTimeout(() => {
+            butterfly.classList.add('active');
+        }, 100);
+        
+        butterflyCount++;
+        updateGardenStats();
+        
+        // Remove butterfly after animation
+        setTimeout(() => {
+            butterfly.remove();
+            butterflyCount = Math.max(0, butterflyCount - 1);
+            updateGardenStats();
+        }, 8000);
+    }
+    
+    function showImageFromFlower(imgElement) {
+        // Create modal to show the original image
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+        `;
+        
+        const img = document.createElement('img');
+        img.src = imgElement.src;
+        img.style.cssText = `
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        `;
+        
+        modal.appendChild(img);
+        document.body.appendChild(modal);
+        
+        modal.addEventListener('click', () => {
+            modal.remove();
+        });
+    }
+    
+    function updateGardenStats() {
+        if (flowerCountEl) flowerCountEl.textContent = flowerCount;
+        if (butterflyCountEl) butterflyCountEl.textContent = butterflyCount;
+        if (memoryCountEl) memoryCountEl.textContent = memoryCount;
+    }
+    
+    function saveGardenProgress() {
+        localStorage.setItem('gardenFlowerCount', flowerCount.toString());
+        localStorage.setItem('gardenMemoryCount', memoryCount.toString());
+        
+        // Save flower positions and types
+        const flowers = Array.from(flowerBed.querySelectorAll('.garden-flower')).map(flower => ({
+            photoIndex: flower.getAttribute('data-photo'),
+            type: flower.textContent,
+            left: flower.style.left,
+            top: flower.style.top
+        }));
+        localStorage.setItem('gardenFlowers', JSON.stringify(flowers));
+    }
+    
+    function loadExistingFlowers() {
+        const savedFlowers = JSON.parse(localStorage.getItem('gardenFlowers') || '[]');
+        
+        savedFlowers.forEach(flowerData => {
+            const flower = document.createElement('div');
+            flower.className = 'garden-flower bloomed';
+            flower.setAttribute('data-photo', flowerData.photoIndex);
+            flower.textContent = flowerData.type;
+            flower.style.cssText = `
+                left: ${flowerData.left};
+                top: ${flowerData.top};
+            `;
+            
+            flowerBed.appendChild(flower);
+            
+            // Add click handler
+            flower.addEventListener('click', () => {
+                createFlowerClickEffect(flower);
+                const carouselImg = document.querySelector(`.carousel-slide:nth-child(${parseInt(flowerData.photoIndex) + 1}) img`);
+                if (carouselImg) {
+                    showImageFromFlower(carouselImg);
+                }
+            });
+        });
+    }
+    
+    // Add CSS for garden effects
+    if (!document.getElementById('garden-effects-css')) {
+        const style = document.createElement('style');
+        style.id = 'garden-effects-css';
+        style.textContent = `
+            @keyframes planting-particle {
+                0% { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; }
+                50% { transform: scale(1.3) translateY(-20px) rotate(180deg); opacity: 1; }
+                100% { transform: scale(0) translateY(-40px) rotate(360deg); opacity: 0; }
+            }
+            @keyframes flower-click-burst {
+                0% { transform: scale(1) rotate(0deg); opacity: 1; }
+                100% { transform: scale(0) rotate(360deg) translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px); opacity: 0; }
+            }
+            @keyframes flower-celebrate {
+                0%, 100% { transform: scale(1) rotate(0deg); }
+                25% { transform: scale(1.2) rotate(5deg); }
+                50% { transform: scale(1.3) rotate(-5deg); }
+                75% { transform: scale(1.1) rotate(3deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// ===== HORIZONTAL PARALLAX MEMORIES CAROUSEL =====
+function initializeMemoriesGallery() {
+    console.log('🎠 Initializing Horizontal Parallax Memories Carousel...');
+    
+    // Define all memory images from the folder (complete list from your memories folder)
+    const memoryImages = [
+        'images/memories/IMG_1708.JPG', 'images/memories/IMG_1709.JPG', 'images/memories/IMG_1710.JPG',
+        'images/memories/IMG_1711.JPG', 'images/memories/IMG_1712.JPG', 'images/memories/IMG_1713.JPG',
+        'images/memories/IMG_1714.JPG', 'images/memories/IMG_1715.JPG', 'images/memories/IMG_1716.JPG',
+        'images/memories/IMG_1717.JPG', 'images/memories/IMG_1718.JPG', 'images/memories/IMG_1719.JPG',
+        'images/memories/IMG_1720.JPG', 'images/memories/IMG_1721.JPG', 'images/memories/IMG_1722.JPG',
+        'images/memories/IMG_1723.JPG', 'images/memories/IMG_1724.JPG', 'images/memories/IMG_1725.JPG',
+        'images/memories/IMG_1726.JPG', 'images/memories/IMG_1727.JPG', 'images/memories/IMG_1728.JPG',
+        'images/memories/IMG_1729.JPG', 'images/memories/IMG_1730.JPG', 'images/memories/IMG_1731.JPG',
+        'images/memories/IMG_1732.JPG', 'images/memories/IMG_1733.JPG', 'images/memories/IMG_1734.JPG',
+        'images/memories/IMG_1735.JPG', 'images/memories/IMG_1736.JPG', 'images/memories/IMG_1737.JPG',
+        'images/memories/IMG_1738.JPG', 'images/memories/IMG_1739.JPG', 'images/memories/IMG_1740.JPG',
+        'images/memories/IMG_1741.JPG', 'images/memories/IMG_1742.JPG', 'images/memories/IMG_1744.JPG',
+        'images/memories/IMG_1745.JPG', 'images/memories/IMG_1746.JPG', 'images/memories/IMG_1747.JPG',
+        'images/memories/IMG_1748.JPG', 'images/memories/IMG_1750.JPG', 'images/memories/IMG_1751.JPG',
+        'images/memories/IMG_1752.JPG', 'images/memories/IMG_1753.JPG', 'images/memories/IMG_1754.JPG',
+        'images/memories/IMG_1756.JPG', 'images/memories/IMG_1757.JPG', 'images/memories/IMG_1758.JPG',
+        'images/memories/IMG_1759.JPG', 'images/memories/IMG_1760.JPG', 'images/memories/IMG_1761.JPG',
+        'images/memories/IMG_1762.JPG', 'images/memories/IMG_1763.JPG', 'images/memories/IMG_1764.JPG',
+        'images/memories/IMG_1765.JPG', 'images/memories/IMG_1767.JPG', 'images/memories/IMG_1768.JPG',
+        'images/memories/IMG_1769.JPG', 'images/memories/IMG_1772.JPG', 'images/memories/IMG_1773.JPG',
+        'images/memories/IMG_1774.JPG'
+    ];
+    
+    console.log(`📂 Loaded ${memoryImages.length} memory images from folder`);
+    
+    // Preload images for better performance
+    const preloadedImages = [];
+    memoryImages.forEach((src, index) => {
+        const img = new Image();
+        img.onload = () => {
+            console.log(`✅ Preloaded memory ${index + 1}/${memoryImages.length}`);
+        };
+        img.onerror = () => {
+            console.warn(`⚠️ Failed to load memory image: ${src}`);
+        };
+        img.src = src;
+        preloadedImages.push(img);
+    });
+    
+    const track = document.getElementById('parallaxTrack');
+    const dotsContainer = document.getElementById('parallaxDots');
+    const prevBtn = document.getElementById('parallaxPrev');
+    const nextBtn = document.getElementById('parallaxNext');
+    const currentMemorySpan = document.getElementById('currentMemory');
+    const totalMemoriesSpan = document.getElementById('totalMemories');
+    const lightbox = document.getElementById('memoriesLightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const closeLightbox = document.getElementById('closeLightbox');
+    const prevMemory = document.getElementById('prevMemory');
+    const nextMemory = document.getElementById('nextMemory');
+    
+    if (!track || !dotsContainer) {
+        console.error('❌ Parallax Carousel: Missing required elements!');
+        return;
+    }
+    
+    let currentIndex = 0;
+    let isTransitioning = false;
+    let autoplayInterval;
+    
+    // Initialize carousel
+    function initCarousel() {
+        // Create slides grouped by 3 images each
+        const slidesData = [];
+        for (let i = 0; i < memoryImages.length; i += 3) {
+            slidesData.push(memoryImages.slice(i, i + 3));
+        }
+        
+        // Generate slides HTML
+        track.innerHTML = '';
+        slidesData.forEach((slideImages, slideIndex) => {
+            const slide = document.createElement('div');
+            slide.className = 'parallax-slide';
+            
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'parallax-image-container';
+            
+            slideImages.forEach((imageSrc, imgIndex) => {
+                const imageDiv = document.createElement('div');
+                const imageClass = imgIndex === 1 ? 'main' : (imgIndex === 0 ? 'side' : 'hidden');
+                imageDiv.className = `parallax-image ${imageClass}`;
+                
+                const img = document.createElement('img');
+                img.src = imageSrc;
+                img.alt = `Memory from Minh Châu's first year`;
+                img.loading = 'lazy';
+                
+                const caption = document.createElement('div');
+                caption.className = 'image-caption';
+                caption.textContent = `Memory ${slideIndex * 3 + imgIndex + 1}`;
+                
+                imageDiv.appendChild(img);
+              //  imageDiv.appendChild(caption);
+                imageContainer.appendChild(imageDiv);
+                
+                // Add click handler for lightbox
+                imageDiv.addEventListener('click', () => {
+                    openLightbox(slideIndex * 3 + imgIndex);
+                });
+            });
+            
+            slide.appendChild(imageContainer);
+            track.appendChild(slide);
+        });
+        
+        // Generate dots
+        dotsContainer.innerHTML = '';
+        slidesData.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = `parallax-dot ${index === 0 ? 'active' : ''}`;
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+        
+        // Update counters
+        if (totalMemoriesSpan) totalMemoriesSpan.textContent = memoryImages.length;
+        if (currentMemorySpan) currentMemorySpan.textContent = 1;
+        
+        console.log(`🎠 Parallax Carousel initialized with ${slidesData.length} slides and ${memoryImages.length} memories!`);
+    }
+    
+    // Navigation functions
+    function goToSlide(index) {
+        if (isTransitioning) return;
+        
+        const slides = track.children;
+        const totalSlides = slides.length;
+        
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        
+        currentIndex = index;
+        isTransitioning = true;
+        
+        // Update track position
+        const translateX = -currentIndex * 100;
+        track.style.transform = `translateX(${translateX}%)`;
+        
+        // Update dots
+        document.querySelectorAll('.parallax-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+        });
+        
+        // Update counter
+        if (currentMemorySpan) {
+            currentMemorySpan.textContent = currentIndex * 3 + 2; // Focus on main image
+        }
+        
+        // Create parallax effect
+        createParallaxEffect();
+        playTone(440 + currentIndex * 50, 0.15);
+        
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 800);
+    }
+    
+    function nextSlide() {
+        goToSlide(currentIndex + 1);
+    }
+    
+    function prevSlide() {
+        goToSlide(currentIndex - 1);
+    }
+    
+    // Lightbox functions
+    function openLightbox(imageIndex) {
+        if (!lightbox || !lightboxImage) return;
+        
+        lightboxImage.src = memoryImages[imageIndex];
+        lightboxImage.alt = `Memory ${imageIndex + 1} from Minh Châu's first year`;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        createMemoryViewEffect();
+        playTone(550, 0.2);
+    }
+    
+    function closeLightboxHandler() {
+        if (!lightbox) return;
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        lightboxImage.src = '';
+    }
+    
+    // Effects
+    function createParallaxEffect() {
+        for (let i = 0; i < 8; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    left: ${Math.random() * window.innerWidth}px;
+                    top: ${window.innerHeight / 2 + Math.random() * 100 - 50}px;
+                    width: 12px;
+                    height: 12px;
+                    background: ${['✨', '💫', '🌟'][Math.floor(Math.random() * 3)]};
+                    font-size: 12px;
+                    pointer-events: none;
+                    z-index: 1000;
+                    animation: parallax-slide-in 1s ease-out forwards;
+                `;
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }, i * 100);
+        }
+    }
+    
+    function createMemoryViewEffect() {
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    left: ${window.innerWidth / 2}px;
+                    top: ${window.innerHeight / 2}px;
+                    width: 15px;
+                    height: 15px;
+                    background: ${['📷', '💕', '✨', '🌟'][Math.floor(Math.random() * 4)]};
+                    font-size: 15px;
+                    pointer-events: none;
+                    z-index: 10000;
+                    animation: memory-view-particle 1.5s ease-out forwards;
+                `;
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1500);
+            }, i * 50);
+        }
+    }
+    
+    // Event listeners
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    
+    if (closeLightbox) closeLightbox.addEventListener('click', closeLightboxHandler);
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightboxHandler();
+        });
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (lightbox && lightbox.classList.contains('active')) {
+            switch(e.key) {
+                case 'Escape':
+                    closeLightboxHandler();
+                    break;
+                case 'ArrowLeft':
+                    if (prevMemory) prevMemory.click();
+                    break;
+                case 'ArrowRight':
+                    if (nextMemory) nextMemory.click();
+                    break;
+            }
+        } else {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    prevSlide();
+                    break;
+                case 'ArrowRight':
+                    nextSlide();
+                    break;
+            }
+        }
+    });
+    
+    // Auto-play
+    function startAutoplay() {
+        autoplayInterval = setInterval(() => {
+            if (!isTransitioning && (!lightbox || !lightbox.classList.contains('active'))) {
+                nextSlide();
+            }
+        }, 5000);
+    }
+    
+    function stopAutoplay() {
+        if (autoplayInterval) {
+            clearInterval(autoplayInterval);
+            autoplayInterval = null;
+        }
+    }
+    
+    // Touch/swipe support
+    let startX = 0;
+    let startY = 0;
+    
+    track.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+    });
+    
+    track.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+        
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+            if (diffX > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+    });
+    
+    // Initialize and start autoplay
+    initCarousel();
+    startAutoplay();
+    
+    // Pause autoplay on hover
+    const parallaxViewer = document.getElementById('parallaxViewer');
+    if (parallaxViewer) {
+        parallaxViewer.addEventListener('mouseenter', stopAutoplay);
+        parallaxViewer.addEventListener('mouseleave', startAutoplay);
+    }
+    
+    // Add dynamic CSS for particle animations
+    if (!document.getElementById('parallax-effects-css')) {
+        const style = document.createElement('style');
+        style.id = 'parallax-effects-css';
+        style.textContent = `
+            @keyframes memory-view-particle {
+                0% { transform: scale(1) rotate(0deg); opacity: 1; }
+                50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
+                100% { transform: scale(0) rotate(360deg) translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// ===== INITIALIZE ALL NEW FEATURES =====
+function initializeMagicalFeatures() {
+    console.log('🔧 DEBUG: Starting magical features initialization...');
+    initializeTimeCapsule();
+    initializeMemoryGarden();
+    initializeMemoriesGallery();
+    console.log('🔧 DEBUG: Magical features initialization complete!');
+}
+
+
 // Initialize interactive CSS
 document.addEventListener('DOMContentLoaded', addInteractiveCSS);
 
@@ -2121,5 +3102,8 @@ window.partyApp = {
     initializeParallaxEffects,
     addDynamicFloatingElements,
     initializeCarousel,
-    initializeInteractiveFeatures
+    initializeInteractiveFeatures,
+    initializeMagicalFeatures,
+    initializeTimeCapsule,
+    initializeConstellation
 };

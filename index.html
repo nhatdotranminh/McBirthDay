@@ -47,6 +47,36 @@
     <!-- Mouse Trail Sparkles -->
     <div class="sparkle-trail"></div>
 
+    <!-- Time Capsule Messages -->
+    <div class="time-capsule-container">
+        <div class="floating-bottle" id="timeCapsuleBottle">
+            <div class="bottle-body">💌</div>
+            <div class="bottle-glow"></div>
+            <div class="floating-message">Messages for Future Minh Châu ✨</div>
+        </div>
+    </div>
+
+    <!-- Time Capsule Modal -->
+    <div class="time-capsule-modal" id="timeCapsuleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💫 Time Capsule for Minh Châu's 18th Birthday 💫</h3>
+                <span class="close-modal" id="closeTimeCapsule">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Write a special message for Minh Châu to read when she turns 18! 💝</p>
+                <textarea id="timeCapsuleMessage" placeholder="Dear Future Minh Châu..."></textarea>
+                <input type="text" id="senderName" placeholder="Your name">
+                <button id="saveMessage" class="btn btn-primary">✨ Save Message ✨</button>
+                <div class="saved-messages" id="savedMessages"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="header">
+     
+    </header>
  
     <!-- Spectacular Hero Section -->
     <section class="hero">
@@ -134,30 +164,7 @@
                             </div>
                         </div>
                         
-                        <div class="cake-tier cake-tier-2">
-                            <div class="tier-base">🧁</div>
-                            <div class="tier-decorations">
-                                <div class="tier-decoration">🌸</div>
-                                <div class="tier-decoration">🎀</div>
-                                <div class="tier-decoration">💖</div>
-                            </div>
-                        </div>
-                        
-                        <div class="cake-tier cake-tier-1">
-                            <div class="tier-base">🍰</div>
-                            <div class="cake-candles-spectacular">
-                                <div class="mega-candle candle-1" data-candle="1">
-                                    <div class="flame mega-flame">🕯️</div>
-                                    <div class="flame-glow"></div>
-                                </div>
-                            </div>
-                            <div class="tier-decorations top-tier">
-                                <div class="tier-decoration crown">👑</div>
-                                <div class="tier-decoration">💎</div>
-                                <div class="tier-decoration">✨</div>
-                            </div>
-                        </div>
-                        
+                    
                         <!-- Enhanced Magic Effects -->
                         <div class="cake-magic-aura mega-aura"></div>
                         <div class="cake-energy-rings">
@@ -166,19 +173,10 @@
                             <div class="energy-ring ring-3"></div>
                         </div>
                         
-                        <!-- Floating Magic Particles -->
-                        <div class="cake-magic-particles">
-                            <div class="magic-particle particle-1">✨</div>
-                            <div class="magic-particle particle-2">⭐</div>
-                            <div class="magic-particle particle-3">💫</div>
-                            <div class="magic-particle particle-4">🌟</div>
-                            <div class="magic-particle particle-5">💖</div>
-                            <div class="magic-particle particle-6">🦄</div>
-                        </div>
+                       
                     </div>
                     
                     <div class="cake-instruction mega-instruction magical-entrance">
-                        <p>🌬️ Click the MEGA CAKE for Ultimate Birthday Magic! 🌬️</p>
                         <div class="instruction-sparkles">
                             <span>✨</span><span>⭐</span><span>✨</span>
                         </div>
@@ -187,7 +185,6 @@
                     <div class="wish-particles mega-wish-particles" id="wishParticles"></div>
                 </div>
                 
-                <!-- Enhanced Rainbow Base -->
                 <div class="cake-rainbow-base mega-rainbow-base"></div>
                 <div class="cake-ground-effects">
                     <div class="ground-sparkle"></div>
@@ -315,12 +312,23 @@
                     <div class="milestone-icon birthday-icon">🎉</div>
                     <div class="milestone-content">
                         <h3>First Birthday!</h3>
+                        <div class="birth-stats">
+                            <div class="stat">
+                                <span class="stat-icon">⚖️</span>
+                                <span class="stat-text-2">9kg</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-icon">📏</span>
+                                <span class="stat-text-2">76cm</span>
+                            </div>
+                        </div>
                         <p>One amazing year complete!</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Photo Gallery Section -->
     <section id="photo-gallery" class="photo-gallery-section">
@@ -450,6 +458,65 @@
             </div>
         </div>
     </section>
+
+    <!-- Precious Memories Gallery -->
+    <section id="memories-section" class="memories-section">
+        <div class="memories-parallax-bg"></div>
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-heart"></i>
+                💕 Precious Memories 💕
+            </h2>
+            <p class="memories-subtitle">
+                Every moment of Minh Châu's first year captured with love! Click any photo to see it larger! 📷✨
+            </p>
+            
+            <!-- Memories Carousel -->
+            <div class="memories-carousel-container">
+               
+            </div>
+            
+            <!-- Horizontal Parallax Memory Viewer -->
+            <div class="horizontal-parallax-container">
+                <div class="parallax-viewer" id="parallaxViewer">
+                    <div class="parallax-track" id="parallaxTrack">
+                        <!-- Parallax memory images will be loaded here -->
+                    </div>
+                    
+                    <!-- Parallax Navigation Dots -->
+                    <div class="parallax-dots" id="parallaxDots">
+                        <!-- Dots will be generated here -->
+                    </div>
+                    
+                    <!-- Parallax Controls -->
+                    <div class="parallax-controls">
+                        <button class="parallax-btn parallax-prev" id="parallaxPrev">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="parallax-btn parallax-next" id="parallaxNext">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                 
+                </div>
+            </div>
+        </div>
+        
+        <!-- Memories Lightbox -->
+        <div class="memories-lightbox" id="memoriesLightbox">
+            <div class="lightbox-content">
+                <span class="lightbox-close" id="closeLightbox">&times;</span>
+                <img class="lightbox-image" id="lightboxImage" src="" alt="">
+                <div class="lightbox-nav">
+                    <button class="lightbox-prev" id="prevMemory">‹</button>
+                    <button class="lightbox-next" id="nextMemory">›</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
 
     <!-- Footer -->
     <footer class="footer">

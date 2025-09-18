@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Readiness Check</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .check-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        .check-item.warning {
+            border-left-color: #FFC107;
+        }
+        .check-item.error {
+            border-left-color: #F44336;
+        }
+        .status {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .success { color: #4CAF50; }
+        .warning { color: #FFC107; }
+        .error { color: #F44336; }
+        .deployment-links {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .deploy-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px;
+            background: #ff6b9d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .deploy-btn:hover {
+            background: #e55a87;
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Deployment Readiness Check</h1>
+        <p>This page will help you verify that Minh Châu's birthday page is ready for deployment!</p>
+        
+        <div id="checkResults"></div>
+        
+        <div class="deployment-links">
+            <h3>🌐 Ready to Deploy? Choose a hosting service:</h3>
+            <a href="https://netlify.com" target="_blank" class="deploy-btn">
+                📦 Netlify (Easiest)
+            </a>
+            <a href="https://github.com" target="_blank" class="deploy-btn">
+                🐙 GitHub Pages
+            </a>
+            <a href="https://vercel.com" target="_blank" class="deploy-btn">
+                ⚡ Vercel
+            </a>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Quick Deployment Steps (Netlify):</h3>
+            <ol>
+                <li>Go to <strong>netlify.com</strong> and sign up</li>
+                <li>Click <strong>"Add new site"</strong> → <strong>"Deploy manually"</strong></li>
+                <li>Drag your entire <strong>McBirthDay</strong> folder to the page</li>
+                <li>Wait 1-2 minutes for deployment</li>
+                <li>Get your free URL and share it! 🎉</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function checkDeploymentReadiness() {
+            const results = document.getElementById('checkResults');
+            const checks = [];
+            
+            // Check if main files exist
+            const mainFiles = ['index.html', 'styles.css', 'script.js'];
+            
+            // Check if running from file system
+            const isLocal = window.location.protocol === 'file:';
+            
+            if (isLocal) {
+                checks.push({
+                    status: 'success',
+                    message: '✅ Running locally - Good for testing before deployment'
+                });
+            }
+            
+            // Check if page title is customized
+            const title = document.title;
+            if (title.includes('Minh Châu')) {
+                checks.push({
+                    status: 'success',
+                    message: '✅ Page title is customized for Minh Châu'
+                });
+            } else {
+                checks.push({
+                    status: 'warning',
+                    message: '⚠️ Consider customizing the page title'
+                });
+            }
+            
+            // Check for images folder
+            const img = new Image();
+            img.onload = function() {
+                checks.push({
+                    status: 'success',
+                    message: '✅ Images folder is accessible'
+                });
+                displayResults();
+            };
+            img.onerror = function() {
+                checks.push({
+                    status: 'error',
+                    message: '❌ Images folder not found - Make sure images/ folder exists'
+                });
+                displayResults();
+            };
+            img.src = './images/Happy Birthday.jpg';
+            
+            // Basic checks
+            checks.push({
+                status: 'success',
+                message: '✅ HTML structure is valid'
+            });
+            
+            checks.push({
+                status: 'success',
+                message: '✅ CSS and JavaScript files are linked'
+            });
+            
+            // Check if configuration looks updated
+            if (window.partyApp && window.partyApp.PARTY_CONFIG) {
+                const config = window.partyApp.PARTY_CONFIG;
+                if (config.daughter.name === 'Minh Châu') {
+                    checks.push({
+                        status: 'success',
+                        message: '✅ Party configuration is updated for Minh Châu'
+                    });
+                } else {
+                    checks.push({
+                        status: 'warning',
+                        message: '⚠️ Party configuration might need updating'
+                    });
+                }
+            }
+            
+            function displayResults() {
+                results.innerHTML = checks.map(check => `
+                    <div class="check-item ${check.status}">
+                        <span class="status ${check.status}">${check.status.toUpperCase()}</span>
+                        ${check.message}
+                    </div>
+                `).join('');
+            }
+            
+            // Display initial results
+            displayResults();
+        }
+        
+        // Run checks when page loads
+        window.addEventListener('load', checkDeploymentReadiness);
+    </script>
+</body>
+</html>

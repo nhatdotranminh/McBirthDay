@@ -5372,7 +5372,7 @@ a:focus {
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    background: rgba(255, 255, 255, 0.9);
+    background: transparent;
 }
 
 .lightbox-btn {
@@ -5397,8 +5397,16 @@ a:focus {
 
 .lightbox-counter {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-dark);
+    background: transparent !important;
+    padding: 8px 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .lightbox-actions {
@@ -5620,13 +5628,18 @@ a:focus {
     position: absolute;
     top: 20px;
     right: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    backdrop-filter: blur(10px);
+    background: none;
+    color: var(--text-dark);
+    padding: 4px 8px;
+    border-radius: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    backdrop-filter: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* MEMORIES LIGHTBOX */
@@ -6426,13 +6439,19 @@ a:focus {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: rgba(255, 255, 255, 0.95);
+        background: transparent;
     }
     
     .lightbox-btn {
-        padding: 8px 12px;
-        font-size: 0.8rem;
-        min-width: 80px;
+        padding: 12px;
+        font-size: 1.2rem;
+        min-width: 44px;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
     }
     
     .lightbox-actions {
@@ -6525,8 +6544,15 @@ a:focus {
     .memory-counter {
         top: 15px;
         right: 15px;
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 4px 6px;
+        font-size: 0.9rem;
+        background: transparent !important;
+        color: var(--text-dark);
+        font-weight: 700;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        backdrop-filter: none !important;
+        border-radius: 0;
+        box-shadow: none !important;
     }
     
     .parallax-dots {
@@ -6853,6 +6879,74 @@ a:focus {
     }
     75% { 
         transform: scale(1.1) rotate(5deg); 
+    }
+}
+
+/* Desktop Layout Fixes - Override mobile-specific changes on larger screens */
+@media (min-width: 769px) {
+    .magical-time-capsule-modal {
+        padding: 20px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow-y: auto !important;
+    }
+    
+    .magical-modal-content {
+        width: 95% !important;
+        max-width: 600px !important;
+        height: auto !important;
+        max-height: 90vh !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        border-radius: 24px !important;
+    }
+    
+    .magical-modal-body {
+        padding: 32px !important;
+        max-height: calc(90vh - 160px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    .messages-header {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+    
+    .messages-title {
+        font-size: 1.3rem !important;
+        width: auto !important;
+        flex: none !important;
+    }
+    
+    .magical-messages-container {
+        max-height: 300px !important;
+        min-height: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-right: 8px !important;
+    }
+    
+    .lightbox-container {
+        max-width: 90vw !important;
+        max-height: 95vh !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 0 !important;
+    }
+    
+    .lightbox-btn {
+        padding: 12px !important;
+        font-size: 1.4rem !important;
+        min-width: 48px !important;
+        width: 48px !important;
+        height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
     }
 }
 

@@ -1266,9 +1266,9 @@ function initializeCarousel() {
 
     // Update navigation menu to include gallery
     const navMenu = document.querySelector('.nav-menu');
-    if (navMenu && !navMenu.querySelector('a[href="#photo-gallery"]')) {
+    if (navMenu && !navMenu.querySelector('a[href="#memories-section"]')) {
         const galleryItem = document.createElement('li');
-        galleryItem.innerHTML = '<a href="#photo-gallery">Gallery</a>';
+        galleryItem.innerHTML = '<a href="#memories-section">Gallery</a>';
         // Insert before RSVP
         const rsvpItem = navMenu.querySelector('a[href="#rsvp"]')?.parentElement;
         if (rsvpItem) {
@@ -3282,7 +3282,9 @@ function initializeMemoriesGallery() {
         ],
         family: [
             'familytime/IMG_0605.jpg', 'familytime/IMG_0660.jpg', 'familytime/IMG_0724.jpg', 
-            'familytime/IMG_0750.jpg', 'familytime/IMG_0753.jpg', 'familytime/IMG_0759.jpg'
+            'familytime/IMG_0750.jpg', 'familytime/IMG_0753.jpg', 'familytime/IMG_0759.jpg',
+            'familytime/IMG_1775.JPG', 'familytime/IMG_1776.JPG', 'familytime/IMG_1777.JPG',
+            'familytime/IMG_1778.JPG', 'familytime/IMG_1779.JPG'
         ],
         milestones: [
             'milesstone/IMG_0400.jpg', 'milesstone/IMG_0402.jpg', 'milesstone/IMG_0429.jpg', 'milesstone/IMG_0669.jpg',

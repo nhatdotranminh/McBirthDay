@@ -2566,10 +2566,6 @@ function initializeTimeCapsule() {
 
             playTone(659.25, 0.3); // E5 note
         } catch (error) {
-                code: error.code,
-                message: error.message,
-                stack: error.stack
-            });
             
             // Try to save locally as fallback
             try {
@@ -3348,12 +3344,6 @@ function initializeMemoriesGallery() {
         const downloadPhoto = document.getElementById('downloadPhoto');
         const sharePhoto = document.getElementById('sharePhoto');
 
-            masonryGrid: !!masonryGrid,
-            totalPhotosEl: !!totalPhotosEl,
-            infiniteLoadingIndicator: !!infiniteLoadingIndicator,
-            filterBtns: filterBtns.length,
-            memoriesLightbox: !!memoriesLightbox
-        });
 
         if (!masonryGrid) {
             return;
@@ -3469,9 +3459,6 @@ function initializeMemoriesGallery() {
         }
 
         function loadAllImages() {
-                totalFiltered: filteredImages.length,
-                masonryGrid: !!masonryGrid
-            });
             
             if (filteredImages.length === 0) {
                 return;
@@ -3657,10 +3644,6 @@ function initializeMemoriesGallery() {
         
         // Add a simple test to see if the gallery container is working
         setTimeout(() => {
-                masonryGridChildren: masonryGrid ? masonryGrid.children.length : 'null',
-                loadedImages,
-                filteredImagesLength: filteredImages.length
-            });
         }, 2000);
         
     }

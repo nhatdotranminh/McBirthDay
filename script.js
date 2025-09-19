@@ -1,3 +1,56 @@
+// ===== FIREBASE CONFIGURATION =====
+const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyDpLLUImD45TaJ1gq98nsK1G7rxg4tC4HQ",
+    authDomain: "mcbirthdaymessage.firebaseapp.com",
+    projectId: "mcbirthdaymessage",
+    storageBucket: "mcbirthdaymessage.firebasestorage.app",
+    messagingSenderId: "933159840175",
+    appId: "1:933159840175:web:b9668d816c12b0360fe75a",
+    measurementId: "G-XP4B061CPB"
+};
+
+// Initialize Firebase (will use demo mode if real config not provided)
+let db = null;
+let isFirebaseEnabled = false;
+
+try {
+    // Only initialize if Firebase is loaded
+    if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(FIREBASE_CONFIG);
+        db = firebase.firestore();
+        
+        // Test connection
+        
+        // Enable debugging for Firestore
+        if (window.location.hostname === 'localhost') {
+            firebase.firestore.setLogLevel('debug');
+        }
+        
+        isFirebaseEnabled = true;
+        
+        // Test Firebase connection
+        testFirebaseConnection();
+    } else {
+    }
+} catch (error) {
+    isFirebaseEnabled = false;
+}
+
+// Test Firebase connection
+async function testFirebaseConnection() {
+    try {
+        
+        // Try to read from the collection (should work even if empty)
+        const testQuery = await db.collection('timeCapsuleMessages').limit(1).get();
+        
+        return true;
+    } catch (error) {
+        
+        isFirebaseEnabled = false;
+        return false;
+    }
+}
+
 // Party Configuration - Customize these details
 const PARTY_CONFIG = {
     daughter: {
@@ -5,10 +58,10 @@ const PARTY_CONFIG = {
         age: "1st" // Change this to the birthday age
     },
     details: {
-        date: "Saturday, September 27th, 2025",
-        time: "10:00 AM - 1:00 PM",
-        location: "123 Birthday Street, Celebration City",
-        theme: "Princess & Unicorn Theme"
+        date: "Saturday, September 27, 2025",  // Party date
+        time: "11:00 AM",                      // Party time
+        location: "SESAN Restaurant, 14 Einstein St., Bình Thọ, Thủ Đức", // Party location
+        theme: "Dress in Your Own Style"     
     },
     contact: {
         phone: "+1 (555) 123-4567",
@@ -17,11 +70,117 @@ const PARTY_CONFIG = {
     }
 };
 
+// Initialize musical birthday song
+function initializeBirthdaySong() {
+    
+    const playAllBtn = document.getElementById('playAllNotes');
+    const noteButtons = document.querySelectorAll('.note-btn');
+    
+    if (!playAllBtn || noteButtons.length === 0) {
+        return;
+    }
+    
+    // Individual note button handlers
+    noteButtons.forEach((btn, index) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const frequency = parseFloat(btn.dataset.note);
+            const duration = parseFloat(btn.dataset.duration) || 0.5;
+            
+            // Visual feedback
+            btn.style.transform = 'translateY(-2px) scale(1.02)';
+            btn.style.background = 'linear-gradient(135deg, var(--primary-color), var(--rose-500))';
+            btn.style.color = 'white';
+            
+            // Play the note
+            playTone(frequency, duration);
+            
+            // Reset visual feedback
+            setTimeout(() => {
+                btn.style.transform = '';
+                btn.style.background = '';
+                btn.style.color = '';
+            }, duration * 1000);
+            
+        });
+    });
+    
+    // Play full song functionality
+    let isPlayingFullSong = false;
+    playAllBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        if (isPlayingFullSong) {
+            return;
+        }
+        
+        isPlayingFullSong = true;
+        playAllBtn.disabled = true;
+        playAllBtn.style.opacity = '0.7';
+        
+        
+        // Define the full song sequence with timing
+        const songSequence = [
+            // Line 1: Happy Birthday to you
+            { noteIndex: 0, delay: 0 },      // Hap-
+            { noteIndex: 1, delay: 500 },    // -py  
+            { noteIndex: 2, delay: 800 },    // Birth-
+            { noteIndex: 3, delay: 1600 },   // -day
+            { noteIndex: 4, delay: 2400 },   // to
+            { noteIndex: 5, delay: 3200 },   // you
+            
+            // Line 2: Happy Birthday to you  
+            { noteIndex: 6, delay: 4400 },   // Hap-
+            { noteIndex: 7, delay: 4900 },   // -py
+            { noteIndex: 8, delay: 5200 },   // Birth-
+            { noteIndex: 9, delay: 6000 },   // -day
+            { noteIndex: 10, delay: 6800 },  // to
+            { noteIndex: 11, delay: 7600 },  // you
+            
+            // Line 3: Happy Birthday dear Minh Châu
+            { noteIndex: 12, delay: 8800 },  // Hap-
+            { noteIndex: 13, delay: 9300 },  // -py
+            { noteIndex: 14, delay: 10100 }, // Birth-
+            { noteIndex: 15, delay: 10900 }, // -day
+            { noteIndex: 16, delay: 11700 }, // dear
+            { noteIndex: 17, delay: 12500 }, // Minh Châu
+            
+            // Line 4: Happy Birthday to you
+            { noteIndex: 18, delay: 13700 }, // Hap-
+            { noteIndex: 19, delay: 14200 }, // -py
+            { noteIndex: 20, delay: 14500 }, // Birth-
+            { noteIndex: 21, delay: 15300 }, // -day
+            { noteIndex: 22, delay: 16100 }, // to
+            { noteIndex: 23, delay: 16900 }  // you!
+        ];
+        
+        // Play each note in sequence
+        songSequence.forEach(({ noteIndex, delay }) => {
+            setTimeout(() => {
+                if (noteButtons[noteIndex]) {
+                    noteButtons[noteIndex].click();
+                }
+            }, delay);
+        });
+        
+        // Reset play button after song completes
+        setTimeout(() => {
+            isPlayingFullSong = false;
+            playAllBtn.disabled = false;
+            playAllBtn.style.opacity = '1';
+            
+            // Show celebration message
+            showNotification('🎉 Happy Birthday Minh Châu! 🎂 What a beautiful song for our little princess!', 'success');
+        }, 18400); // Total song duration
+    });
+    
+}
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔧 DEBUG: DOM Content Loaded - Starting initialization...');
     initializePartyDetails();
     initializeEventListeners();
+    initializeBirthdaySong();
     initializeAnimations();
     initializeParallaxEffects();
     initializeCarousel();
@@ -34,7 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add debug buttons for testing
     }, 100);
     
-    console.log('🔧 DEBUG: Initial setup complete');
 });
 
 // Initialize party details on the page
@@ -60,6 +218,194 @@ function initializePartyDetails() {
         }
     });
 
+    // Initialize party details animations
+    initializePartyDetailsAnimations();
+}
+
+// Initialize party details animations
+function initializePartyDetailsAnimations() {
+    
+    const detailCards = document.querySelectorAll('.detail-card');
+    
+    if (detailCards.length === 0) {
+        return;
+    }
+    
+    // Add entrance animations with staggered delays
+    detailCards.forEach((card, index) => {
+        // Add animation class with delay
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(50px) scale(0.9)';
+        card.style.transition = 'all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        card.style.transitionDelay = `${index * 0.15}s`;
+        
+        // Animate icon on hover
+        const icon = card.querySelector('i');
+        if (icon) {
+            card.addEventListener('mouseenter', () => {
+                icon.style.animation = 'icon-bounce 0.6s ease';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                icon.style.animation = '';
+            });
+        }
+        
+        // Add Google Maps integration for location card
+        const locationText = card.querySelector('#party-location');
+        if (locationText) {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                openGoogleMaps();
+                createMapClickEffect(card);
+            });
+            
+            // Add visual indicator
+            const mapIcon = card.querySelector('i');
+            if (mapIcon && mapIcon.classList.contains('fa-map-marker-alt')) {
+                const hint = document.createElement('div');
+                hint.innerHTML = '📍 Click to open in Maps';
+                hint.style.cssText = `
+                    font-size: 0.9rem;
+                    color: rgba(255, 255, 255, 0.8);
+                    margin-top: 0.5rem;
+                    font-weight: 500;
+                `;
+                card.appendChild(hint);
+            }
+        }
+    });
+    
+    // Trigger animations when section comes into view
+    const partySection = document.querySelector('.party-details');
+    if (partySection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Trigger card animations
+                    detailCards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0) scale(1)';
+                            
+                            // Add sparkle effect
+                            createPartySparkleEffect(card);
+                        }, index * 150);
+                    });
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.3,
+            rootMargin: '-50px'
+        });
+        
+        observer.observe(partySection);
+    }
+    
+}
+
+// Create sparkle effect for party cards
+function createPartySparkleEffect(card) {
+    for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+            const sparkle = document.createElement('div');
+            const rect = card.getBoundingClientRect();
+            
+            sparkle.style.cssText = `
+                position: fixed;
+                left: ${rect.left + rect.width * Math.random()}px;
+                top: ${rect.top + rect.height * Math.random()}px;
+                width: 8px;
+                height: 8px;
+                background: ${['✨', '💫', '🌟'][Math.floor(Math.random() * 3)]};
+                font-size: 8px;
+                pointer-events: none;
+                z-index: 1000;
+                animation: party-sparkle-fade 1.5s ease-out forwards;
+            `;
+            
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1500);
+        }, i * 100);
+    }
+}
+
+// Open Google Maps with party location
+function openGoogleMaps() {
+    const location = PARTY_CONFIG.details.location;
+    const encodedLocation = encodeURIComponent(location);
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+    
+    // Open in new tab
+    window.open(googleMapsUrl, '_blank');
+    
+    playTone(600, 0.2); // Play sound effect
+}
+
+// Create visual effect when clicking location card
+function createMapClickEffect(card) {
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+            const mapEffect = document.createElement('div');
+            const rect = card.getBoundingClientRect();
+            
+            mapEffect.style.cssText = `
+                position: fixed;
+                left: ${rect.left + rect.width * Math.random()}px;
+                top: ${rect.top + rect.height * Math.random()}px;
+                width: 12px;
+                height: 12px;
+                background: ${['🗺️', '📍', '🌍'][Math.floor(Math.random() * 3)]};
+                font-size: 12px;
+                pointer-events: none;
+                z-index: 1000;
+                animation: map-click-effect 1.2s ease-out forwards;
+            `;
+            
+            document.body.appendChild(mapEffect);
+            setTimeout(() => mapEffect.remove(), 1200);
+        }, i * 50);
+    }
+}
+
+// Add CSS for party sparkle and map effects
+if (!document.getElementById('party-effects-css')) {
+    const style = document.createElement('style');
+    style.id = 'party-effects-css';
+    style.textContent = `
+        @keyframes party-sparkle-fade {
+            0% { 
+                transform: scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: scale(1.5) rotate(180deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(0) rotate(360deg) translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px); 
+                opacity: 0; 
+            }
+        }
+        
+        @keyframes map-click-effect {
+            0% { 
+                transform: scale(1) rotate(0deg); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: scale(2) rotate(180deg); 
+                opacity: 0.8; 
+            }
+            100% { 
+                transform: scale(0) rotate(360deg) translate(${Math.random() * 150 - 75}px, ${Math.random() * 150 - 75}px); 
+                opacity: 0; 
+            }
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 // Initialize event listeners
@@ -130,7 +476,6 @@ function shareParty() {
     if (navigator.share) {
         // Use native sharing if available
         navigator.share(shareData).catch(err => {
-            console.log('Error sharing:', err);
             fallbackShare(shareData);
         });
     } else {
@@ -241,7 +586,6 @@ function initializeCountdown() {
 function initializeCustomization() {
     // This function can be extended to allow real-time customization
     // For now, it just logs the current configuration
-    console.log('Party Configuration:', PARTY_CONFIG);
     
     // In a real application, you might want to:
     // 1. Load configuration from a database
@@ -253,7 +597,6 @@ function initializeCustomization() {
 // Analytics tracking (placeholder)
 function trackEvent(eventName, eventData = {}) {
     // Replace with your analytics service (Google Analytics, etc.)
-    console.log('Event tracked:', eventName, eventData);
     
     // Example Google Analytics tracking:
     // if (typeof gtag !== 'undefined') {
@@ -286,7 +629,6 @@ function handleMissingElements() {
     const missingElements = requiredElements.filter(id => !document.getElementById(id));
     
     if (missingElements.length > 0) {
-        console.warn('Missing required elements:', missingElements);
     }
 }
 
@@ -613,7 +955,6 @@ function initializeCarousel() {
 
     // Return early if carousel elements don't exist
     if (!carousel.track || !carousel.slides.length) {
-        console.warn('Carousel elements not found');
         return;
     }
 
@@ -845,7 +1186,6 @@ function initializeCarousel() {
                 });
                 
                 img.addEventListener('error', () => {
-                    console.warn(`Failed to load image: ${img.src}`);
                     slide.classList.add('error');
                 });
             } else if (img && img.complete) {
@@ -2123,7 +2463,7 @@ function addInteractiveCSS() {
 // ✨ MAGICAL NEW FEATURES JAVASCRIPT ✨
 // ===================================================
 
-// ===== TIME CAPSULE MESSAGES =====
+// ===== MAGICAL TIME CAPSULE =====
 function initializeTimeCapsule() {
     const bottle = document.getElementById('timeCapsuleBottle');
     const modal = document.getElementById('timeCapsuleModal');
@@ -2132,31 +2472,60 @@ function initializeTimeCapsule() {
     const messageInput = document.getElementById('timeCapsuleMessage');
     const nameInput = document.getElementById('senderName');
     const savedMessagesContainer = document.getElementById('savedMessages');
+    const charCounter = document.getElementById('charCount');
+    const messagesCounter = document.getElementById('messagesCounter');
+    const messageForm = document.getElementById('messageForm');
 
     if (!bottle || !modal) return;
+
+    // Initialize character counter
+    if (messageInput && charCounter) {
+        messageInput.addEventListener('input', () => {
+            const count = messageInput.value.length;
+            charCounter.textContent = count;
+            charCounter.style.color = count > 450 ? '#EF4444' : '#6B7280';
+        });
+    }
 
     // Open modal when bottle is clicked
     bottle.addEventListener('click', () => {
         modal.classList.add('active');
+        document.body.classList.add('modal-open'); // Prevent background scroll
         loadSavedMessages();
         playTone(523.25, 0.2); // C5 note
+        
+        // Add entrance animation to bottle
+        bottle.style.animation = 'none';
+        setTimeout(() => {
+            bottle.style.animation = 'magical-bottle-float 6s ease-in-out infinite';
+        }, 100);
     });
 
     // Close modal
     closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
+    modal.querySelector('.modal-backdrop').addEventListener('click', closeModal);
 
     function closeModal() {
         modal.classList.remove('active');
+        document.body.classList.remove('modal-open'); // Re-enable background scroll
         playTone(391.995, 0.2); // G4 note
+        
+        // Reset form
+        if (messageForm) messageForm.reset();
+        if (charCounter) charCounter.textContent = '0';
     }
 
-    // Save message
-    saveBtn.addEventListener('click', saveMessage);
+    // Handle form submission
+    if (messageForm) {
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveMessage();
+        });
+    } else if (saveBtn) {
+        saveBtn.addEventListener('click', saveMessage);
+    }
 
-    function saveMessage() {
+    async function saveMessage() {
         const message = messageInput.value.trim();
         const name = nameInput.value.trim() || 'Anonymous';
 
@@ -2169,44 +2538,191 @@ function initializeTimeCapsule() {
             text: message,
             author: name,
             date: new Date().toLocaleDateString(),
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            id: Date.now().toString() // Simple ID for now
         };
 
-        // Save to localStorage
-        let savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
-        savedMessages.push(messageData);
-        localStorage.setItem('timeCapsuleMessages', JSON.stringify(savedMessages));
+        try {
+            if (isFirebaseEnabled && db) {
+                
+                // Save to Firebase Firestore
+                const docRef = await db.collection('timeCapsuleMessages').add(messageData);
+                showNotification(`Message saved to the cloud for Minh Châu's future! ☁️✨`, 'success');
+            } else {
+                // Fallback to localStorage
+                let savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
+                savedMessages.push(messageData);
+                localStorage.setItem('timeCapsuleMessages', JSON.stringify(savedMessages));
+                showNotification(`Message saved for Minh Châu's future! ✨`, 'success');
+            }
 
-        // Create celebration effect
-        createTimeCapsuleCelebration();
+            // Create celebration effect
+            createTimeCapsuleCelebration();
 
-        // Clear inputs and reload messages
-        messageInput.value = '';
-        nameInput.value = '';
-        loadSavedMessages();
+            // Clear inputs and reload messages
+            messageInput.value = '';
+            nameInput.value = '';
+            loadSavedMessages();
 
-        showNotification(`Message saved for Minh Châu's future! ✨`, 'success');
-        playTone(659.25, 0.3); // E5 note
+            playTone(659.25, 0.3); // E5 note
+        } catch (error) {
+                code: error.code,
+                message: error.message,
+                stack: error.stack
+            });
+            
+            // Try to save locally as fallback
+            try {
+                let savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
+                savedMessages.push(messageData);
+                localStorage.setItem('timeCapsuleMessages', JSON.stringify(savedMessages));
+                showNotification('Message saved locally (cloud connection failed) 💾', 'warning');
+                
+                // Create celebration effect
+                createTimeCapsuleCelebration();
+                
+                // Clear inputs and reload messages
+                messageInput.value = '';
+                nameInput.value = '';
+                loadSavedMessages();
+                
+                playTone(659.25, 0.3); // E5 note
+            } catch (fallbackError) {
+                showNotification('Error saving message. Please try again! 😢', 'error');
+            }
+        }
     }
 
-    function loadSavedMessages() {
-        const savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
-        savedMessagesContainer.innerHTML = '';
+    async function loadSavedMessages() {
+        const loadingHTML = `
+            <div style="text-align: center; padding: 40px; opacity: 0.7;">
+                <div style="font-size: 2rem; margin-bottom: 10px;">⏳</div>
+                <p>Loading magical messages...</p>
+            </div>
+        `;
+        
+        savedMessagesContainer.innerHTML = loadingHTML;
 
-        if (savedMessages.length === 0) {
-            savedMessagesContainer.innerHTML = '<p style="text-align: center; opacity: 0.7;">No messages yet. Be the first to leave one! 💌</p>';
-            return;
-        }
+        try {
+            let savedMessages = [];
+            
+            if (isFirebaseEnabled && db) {
+                // Load from Firebase Firestore
+                const snapshot = await db.collection('timeCapsuleMessages')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+                
+                savedMessages = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+            } else {
+                // Fallback to localStorage
+                savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
+                // Sort by timestamp descending (newest first)
+                savedMessages.sort((a, b) => b.timestamp - a.timestamp);
+            }
 
-        savedMessages.forEach(msg => {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'saved-message';
-            messageDiv.innerHTML = `
-                <div class="message-text">"${msg.text}"</div>
-                <div class="message-author">- ${msg.author} (${msg.date})</div>
+            // Update message counter
+            if (messagesCounter) {
+                const storageIcon = isFirebaseEnabled ? '☁️' : '💾';
+                messagesCounter.innerHTML = `${savedMessages.length} messages ${storageIcon}`;
+            }
+
+            // Clear container
+            savedMessagesContainer.innerHTML = '';
+
+            if (savedMessages.length === 0) {
+                const noMessagesHTML = `
+                    <div style="text-align: center; padding: 40px; opacity: 0.7;">
+                        <div style="font-size: 3rem; margin-bottom: 15px;">💌</div>
+                        <p style="font-size: 1.1rem; color: #6B7280;">
+                            ${isFirebaseEnabled ? 
+                                'No messages in the cloud yet. Be the first to share your love! ☁️✨' :
+                                'No messages saved yet. Be the first to share your love! 💾✨'
+                            }
+                        </p>
+                    </div>
+                `;
+                
+                savedMessagesContainer.innerHTML = noMessagesHTML;
+                return;
+            }
+
+            // Display messages with beautiful cards
+            savedMessages.forEach((msg, index) => {
+                const messageCard = createMagicalMessageCard(msg, index, isFirebaseEnabled);
+                savedMessagesContainer.appendChild(messageCard);
+            });
+
+        } catch (error) {
+            const errorHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">😢</div>
+                    <p style="color: #EF4444; font-weight: 600;">
+                        Error loading messages: ${error.message}
+                    </p>
+                </div>
             `;
-            savedMessagesContainer.appendChild(messageDiv);
-        });
+            savedMessagesContainer.innerHTML = errorHTML;
+        }
+    }
+
+    // Create beautiful message cards
+    function createMagicalMessageCard(msg, index, isFromCloud) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'magical-message-card';
+        messageDiv.style.cssText = `
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 255, 0.95) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.1);
+            animation: message-card-enter 0.6s ease-out forwards;
+            animation-delay: ${index * 0.1}s;
+            opacity: 0;
+            transform: translateY(20px);
+        `;
+        
+        const storageIcon = isFromCloud ? '☁️' : '💾';
+        const cardIcon = ['💝', '💌', '🎁', '✨', '💕', '🌟', '💖', '🌸'][index % 8];
+        
+        messageDiv.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <span style="font-size: 1.5rem;">${cardIcon}</span>
+                <span style="font-size: 0.85rem; color: #6B7280; font-weight: 500;">
+                    ${msg.author || 'Anonymous'} • ${msg.date} ${storageIcon}
+                </span>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <p style="
+                    font-style: italic; 
+                    font-size: 1rem; 
+                    line-height: 1.5; 
+                    color: #374151; 
+                    margin: 0; 
+                    border-left: 3px solid #7C3AED; 
+                    padding-left: 12px;
+                ">
+                    "${msg.text}"
+                </p>
+            </div>
+            <div style="text-align: right; opacity: 0.7;">
+                <span style="font-size: 0.8rem; color: #7C3AED; font-weight: 500;">
+                    — With love for Future Minh Châu 💖
+                </span>
+            </div>
+        `;
+        
+        // Trigger entrance animation
+        setTimeout(() => {
+            messageDiv.style.opacity = '1';
+            messageDiv.style.transform = 'translateY(0)';
+        }, 100 + (index * 100));
+        
+        return messageDiv;
     }
 
     function createTimeCapsuleCelebration() {
@@ -2232,7 +2748,7 @@ function initializeTimeCapsule() {
         }
     }
 
-    // Add CSS for time capsule particles
+    // Add CSS for time capsule effects
     if (!document.getElementById('time-capsule-css')) {
         const style = document.createElement('style');
         style.id = 'time-capsule-css';
@@ -2241,6 +2757,31 @@ function initializeTimeCapsule() {
                 0% { transform: translate(0, 0) scale(1); opacity: 1; }
                 50% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(1.2); opacity: 1; }
                 100% { transform: translate(${Math.random() * 400 - 200}px, ${Math.random() * 400 - 200}px) scale(0); opacity: 0; }
+            }
+            
+            @keyframes message-appear {
+                0% { 
+                    opacity: 0; 
+                    transform: translateY(20px) scale(0.95); 
+                }
+                100% { 
+                    opacity: 1; 
+                    transform: translateY(0) scale(1); 
+                }
+            }
+            
+            .saved-message {
+                transition: all 0.3s ease;
+                margin-bottom: 1rem;
+                padding: 0.8rem;
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .saved-message:hover {
+                background: rgba(255, 255, 255, 0.1);
+                transform: translateY(-2px);
             }
         `;
         document.head.appendChild(style);
@@ -2260,7 +2801,6 @@ function initializeStoryBook() {
     const totalPages = 4;
 
     if (!openBookBtn || !bookCover || !storyPages) {
-        console.error('❌ Story Book: Missing required elements!');
         return;
     }
 
@@ -2275,14 +2815,12 @@ function initializeStoryBook() {
 
     // Open book - multiple event listeners for reliability
     openBookBtn.addEventListener('click', function(e) {
-        console.log('📖 Story book button clicked via click event!');
         e.preventDefault();
         e.stopPropagation();
         openBook();
     });
     
     openBookBtn.addEventListener('touchstart', function(e) {
-        console.log('📖 Story book button touched!');
         e.preventDefault();
         e.stopPropagation();
         openBook();
@@ -2290,7 +2828,6 @@ function initializeStoryBook() {
     
     // Also add direct onclick as backup
     openBookBtn.onclick = function(e) {
-        console.log('📖 Story book button clicked via onclick!');
         e.preventDefault();
         e.stopPropagation();
         openBook();
@@ -2298,8 +2835,6 @@ function initializeStoryBook() {
     };
 
     function openBook() {
-        console.log('📖 openBook() function called!');
-        console.log('📖 Elements found:', { bookCover: !!bookCover, storyPages: !!storyPages });
         
         bookCover.classList.add('opened');
         storyPages.classList.add('active');
@@ -2307,12 +2842,10 @@ function initializeStoryBook() {
         // Show navigation when story is opened
         const storyNav = document.querySelector('.story-nav');
         if (storyNav) {
-            console.log('📖 Story navigation found, adding active class');
             storyNav.classList.add('active');
             storyNav.style.display = 'flex';
             storyNav.style.opacity = '1';
         } else {
-            console.log('📖 Story navigation not found!');
         }
         
         playTone(523.25, 0.3); // C5 note
@@ -2321,7 +2854,6 @@ function initializeStoryBook() {
         
         // Show success notification
         showNotification('Story book opened! 📖✨', 'success');
-        console.log('📖 Story book opened successfully!');
     }
 
     // Navigation - add event listeners even if hidden initially
@@ -2448,7 +2980,6 @@ function initializeStoryBook() {
 
 // ===== GROWING MEMORY GARDEN =====
 function initializeMemoryGarden() {
-    console.log('🌸 Initializing Memory Garden...');
     
     const flowerBed = document.getElementById('flowerBed');
     const butterfliesContainer = document.getElementById('butterfliesContainer');
@@ -2464,7 +2995,6 @@ function initializeMemoryGarden() {
     const butterflyTypes = ['🦋', '🦄', '🧚‍♀️'];
     
     if (!flowerBed) {
-        console.error('❌ Memory Garden: Missing flower bed element!');
         return;
     }
     
@@ -2476,7 +3006,6 @@ function initializeMemoryGarden() {
     function initializeCarouselPhotoClicks() {
         // Add click handlers to all carousel images
         const carouselImages = document.querySelectorAll('.carousel-slide img');
-        console.log('🌸 Found carousel images:', carouselImages.length);
         
         carouselImages.forEach((img, index) => {
             img.addEventListener('click', (e) => {
@@ -2491,7 +3020,6 @@ function initializeMemoryGarden() {
     }
     
     function plantFlowerFromPhoto(imgElement, photoIndex) {
-        console.log('🌸 Planting flower from photo:', photoIndex);
         
         // Check if already planted
         const existingFlower = flowerBed.querySelector(`[data-photo="${photoIndex}"]`);
@@ -2741,44 +3269,462 @@ function initializeMemoryGarden() {
 
 // ===== HORIZONTAL PARALLAX MEMORIES CAROUSEL =====
 function initializeMemoriesGallery() {
-    console.log('🎠 Initializing Horizontal Parallax Memories Carousel...');
     
-    // Define all memory images from the folder (complete list from your memories folder)
-    const memoryImages = [
-        'images/memories/IMG_1708.JPG', 'images/memories/IMG_1709.JPG', 'images/memories/IMG_1710.JPG',
-        'images/memories/IMG_1711.JPG', 'images/memories/IMG_1712.JPG', 'images/memories/IMG_1713.JPG',
-        'images/memories/IMG_1714.JPG', 'images/memories/IMG_1715.JPG', 'images/memories/IMG_1716.JPG',
-        'images/memories/IMG_1717.JPG', 'images/memories/IMG_1718.JPG', 'images/memories/IMG_1719.JPG',
-        'images/memories/IMG_1720.JPG', 'images/memories/IMG_1721.JPG', 'images/memories/IMG_1722.JPG',
-        'images/memories/IMG_1723.JPG', 'images/memories/IMG_1724.JPG', 'images/memories/IMG_1725.JPG',
-        'images/memories/IMG_1726.JPG', 'images/memories/IMG_1727.JPG', 'images/memories/IMG_1728.JPG',
-        'images/memories/IMG_1729.JPG', 'images/memories/IMG_1730.JPG', 'images/memories/IMG_1731.JPG',
-        'images/memories/IMG_1732.JPG', 'images/memories/IMG_1733.JPG', 'images/memories/IMG_1734.JPG',
-        'images/memories/IMG_1735.JPG', 'images/memories/IMG_1736.JPG', 'images/memories/IMG_1737.JPG',
-        'images/memories/IMG_1738.JPG', 'images/memories/IMG_1739.JPG', 'images/memories/IMG_1740.JPG',
-        'images/memories/IMG_1741.JPG', 'images/memories/IMG_1742.JPG', 'images/memories/IMG_1744.JPG',
-        'images/memories/IMG_1745.JPG', 'images/memories/IMG_1746.JPG', 'images/memories/IMG_1747.JPG',
-        'images/memories/IMG_1748.JPG', 'images/memories/IMG_1750.JPG', 'images/memories/IMG_1751.JPG',
-        'images/memories/IMG_1752.JPG', 'images/memories/IMG_1753.JPG', 'images/memories/IMG_1754.JPG',
-        'images/memories/IMG_1756.JPG', 'images/memories/IMG_1757.JPG', 'images/memories/IMG_1758.JPG',
-        'images/memories/IMG_1759.JPG', 'images/memories/IMG_1760.JPG', 'images/memories/IMG_1761.JPG',
-        'images/memories/IMG_1762.JPG', 'images/memories/IMG_1763.JPG', 'images/memories/IMG_1764.JPG',
-        'images/memories/IMG_1765.JPG', 'images/memories/IMG_1767.JPG', 'images/memories/IMG_1768.JPG',
-        'images/memories/IMG_1769.JPG', 'images/memories/IMG_1772.JPG', 'images/memories/IMG_1773.JPG',
-        'images/memories/IMG_1774.JPG'
-    ];
+    // Get all memory images from organized category folders
+    const memoryImagesByCategory = {
+        birthday: [
+            'birthday/Happy Birthday.jpg', 'birthday/LONG0842.jpg', 'birthday/LONG0865.jpg', 
+            'birthday/LONG0879.jpg', 'birthday/LONG0894.jpg', 'birthday/LONG0917.jpg', 
+            'birthday/LONG0963.jpg', 'birthday/LONG0972.jpg', 'birthday/LONG0978.jpg', 'birthday/LONG1020.jpg'
+        ],
+        newborn: [
+            'newborn/IMG_1708.JPG', 'newborn/IMG_1711.JPG', 'newborn/IMG_1712.JPG', 
+            'newborn/IMG_1714.JPG', 'newborn/IMG_1718.JPG', 'newborn/IMG_9849.JPG',
+            'newborn/IMG_9840.jpg', 'newborn/IMG_9841.jpg', 'newborn/IMG_9842.jpg',
+            'newborn/IMG_9844.jpg', 'newborn/IMG_9857.jpg', 'newborn/IMG_9858.jpg',
+            'newborn/IMG_9859.jpg', 'newborn/IMG_9882.jpg', 'newborn/IMG_9888.jpg',
+            'newborn/IMG_9889.jpg', 'newborn/IMG_9921.jpg', 'newborn/IMG_9964.jpg', 'newborn/IMG_9970.jpg'
+        ],
+        family: [
+            'familytime/IMG_0605.jpg', 'familytime/IMG_0660.jpg', 'familytime/IMG_0724.jpg', 
+            'familytime/IMG_0750.jpg', 'familytime/IMG_0753.jpg', 'familytime/IMG_0759.jpg'
+        ],
+        milestones: [
+            'milesstone/IMG_0400.jpg', 'milesstone/IMG_0402.jpg', 'milesstone/IMG_0429.jpg', 'milesstone/IMG_0669.jpg',
+            'milesstone/IMG_1709.JPG', 'milesstone/IMG_1710.JPG', 'milesstone/IMG_1713.JPG', 'milesstone/IMG_1715.JPG',
+            'milesstone/IMG_1716.JPG', 'milesstone/IMG_1717.JPG', 'milesstone/IMG_1719.JPG', 'milesstone/IMG_1720.JPG',
+            'milesstone/IMG_1721.JPG', 'milesstone/IMG_1722.JPG', 'milesstone/IMG_1723.JPG', 'milesstone/IMG_1724.JPG',
+            'milesstone/IMG_1725.JPG', 'milesstone/IMG_1726.JPG', 'milesstone/IMG_1727.JPG', 'milesstone/IMG_1728.JPG',
+            'milesstone/IMG_1729.JPG', 'milesstone/IMG_1730.JPG', 'milesstone/IMG_1731.JPG', 'milesstone/IMG_1732.JPG',
+            'milesstone/IMG_1733.JPG', 'milesstone/IMG_1734.JPG', 'milesstone/IMG_1735.JPG', 'milesstone/IMG_1736.JPG',
+            'milesstone/IMG_1737.JPG', 'milesstone/IMG_1738.JPG', 'milesstone/IMG_1739.JPG', 'milesstone/IMG_1740.JPG',
+            'milesstone/IMG_1741.JPG', 'milesstone/IMG_1742.JPG', 'milesstone/IMG_1744.JPG', 'milesstone/IMG_1745.JPG',
+            'milesstone/IMG_1746.JPG', 'milesstone/IMG_1747.JPG', 'milesstone/IMG_1748.JPG', 'milesstone/IMG_1750.JPG',
+            'milesstone/IMG_1751.JPG', 'milesstone/IMG_1752.JPG', 'milesstone/IMG_1753.JPG', 'milesstone/IMG_1754.JPG',
+            'milesstone/IMG_1756.JPG', 'milesstone/IMG_1757.JPG', 'milesstone/IMG_1758.JPG', 'milesstone/IMG_1759.JPG',
+            'milesstone/IMG_1760.JPG', 'milesstone/IMG_1761.JPG', 'milesstone/IMG_1762.JPG', 'milesstone/IMG_1763.JPG',
+            'milesstone/IMG_1764.JPG', 'milesstone/IMG_1765.JPG', 'milesstone/IMG_1767.JPG', 'milesstone/IMG_1768.JPG',
+            'milesstone/IMG_1769.JPG', 'milesstone/IMG_1774.JPG'
+        ]
+    };
     
-    console.log(`📂 Loaded ${memoryImages.length} memory images from folder`);
+    // Flatten all images with proper category mapping
+    const memoryImages = [];
+    Object.entries(memoryImagesByCategory).forEach(([category, images]) => {
+        images.forEach(imagePath => {
+            memoryImages.push({
+                src: imagePath,
+                category: category,
+                actualCategory: category // Store the real category
+            });
+        });
+    });
     
-    // Preload images for better performance
-    const preloadedImages = [];
+    
+    // Count by category for debugging
+    const categoryCounts = {};
+    memoryImages.forEach(img => {
+        categoryCounts[img.category] = (categoryCounts[img.category] || 0) + 1;
+    });
+
+    // Initialize the new masonry gallery
+    initMasonryGallery();
+
+    function initMasonryGallery() {
+        
+        const masonryGrid = document.getElementById('memoriesMasonryGrid');
+        const totalPhotosEl = document.getElementById('totalPhotos');
+        const infiniteLoadingIndicator = document.getElementById('infiniteLoadingIndicator');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const memoriesLightbox = document.getElementById('memoriesLightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxTitle = document.getElementById('lightboxTitle');
+        const lightboxSubtitle = document.getElementById('lightboxSubtitle');
+        const closeLightbox = document.getElementById('closeLightbox');
+        const prevMemory = document.getElementById('prevMemory');
+        const nextMemory = document.getElementById('nextMemory');
+        const currentMemoryIndex = document.getElementById('currentMemoryIndex');
+        const totalMemoryCount = document.getElementById('totalMemoryCount');
+        const downloadPhoto = document.getElementById('downloadPhoto');
+        const sharePhoto = document.getElementById('sharePhoto');
+
+            masonryGrid: !!masonryGrid,
+            totalPhotosEl: !!totalPhotosEl,
+            infiniteLoadingIndicator: !!infiniteLoadingIndicator,
+            filterBtns: filterBtns.length,
+            memoriesLightbox: !!memoriesLightbox
+        });
+
+        if (!masonryGrid) {
+            return;
+        }
+
+        let currentFilter = 'all';
+        let currentLightboxIndex = 0;
+        let filteredImages = [...memoryImages];
+
+        // Use actual categories from organized folder structure
+        const imageCategories = memoryImages.map((imageData, index) => {
+            return {
+                src: imageData.src,
+                category: imageData.category,
+                title: getImageTitle(imageData.category, index),
+                subtitle: getImageSubtitle(imageData.category)
+            };
+        });
+
+        function getImageTitle(category, index) {
+            const titles = {
+                newborn: [
+                    'First Days', 'Tiny Angel', 'Sweet Dreams', 'Hello World', 'Precious Baby', 
+                    'Peaceful Sleep', 'Little Hands', 'Baby Bliss', 'Pure Joy', 'New Life',
+                    'Gentle Touch', 'Baby Love', 'First Breath', 'Tender Moments', 'Little Miracle',
+                    'Sleepy Baby', 'Angel Face', 'Newborn Wonder', 'Sweet Baby'
+                ],
+                milestones: [
+                    'Growing Strong', 'Big Milestone', 'Development Joy', 'Progress Made', 'Achievement Unlocked'
+                ],
+                family: [
+                    'Family Bond', 'Together Time', 'Love & Laughter', 'Family Joy', 'Precious Moments'
+                ],
+                birthday: [
+                    'Birthday Princess', 'Party Time', 'Celebration Day', 'First Birthday', 'Cake & Joy',
+                    'Special Day', 'Birthday Magic', 'One Year Old', 'Party Fun', 'Birthday Bliss'
+                ]
+            };
+            return titles[category][index % titles[category].length];
+        }
+
+        function getImageSubtitle(category) {
+            const subtitles = {
+                newborn: 'From Minh Châu\'s earliest days',
+                milestones: 'A special growth moment',
+                family: 'Beautiful family memories',
+                birthday: 'Celebrating our little princess\'s first birthday'
+            };
+            return subtitles[category];
+        }
+
+        // Update total photos counter
+        if (totalPhotosEl) {
+            totalPhotosEl.textContent = memoryImages.length;
+        }
+
+        // Initialize lightbox counter
+        if (totalMemoryCount) {
+            totalMemoryCount.textContent = memoryImages.length;
+        }
+
+        function createMemoryItem(imageData, index) {
+            
+            const item = document.createElement('div');
+            item.className = 'memory-item';
+            item.setAttribute('data-category', imageData.category);
+            item.style.animationDelay = `${index * 0.1}s`;
+
+            const img = document.createElement('img');
+            
+            // Smart path construction for organized category folders
+            if (imageData.src.startsWith('http')) {
+                // External URL (placeholder)
+                img.src = imageData.src; 
+            } else {
+                // All images are now in organized subfolders
+                img.src = `images/${imageData.src}`;
+            }
+            
+            
+            img.alt = imageData.title;
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            
+            // Add error handling for images
+            img.onerror = () => {
+                
+                // Check if it's a HEIC file
+                if (img.src.includes('.HEIC') || img.src.includes('.heic')) {
+                    img.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23ff69b4"/%3E%3Ctext x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23ffffff" font-size="14"%3EHEIC Format%3C/text%3E%3Ctext x="50%" y="70%" text-anchor="middle" dy=".3em" fill="%23ffffff" font-size="12"%3ENot Supported%3C/text%3E%3C/svg%3E';
+                } else {
+                    img.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"%3E%3Crect width="300" height="200" fill="%23ff69b4"/%3E%3Ctext x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23ffffff" font-size="16"%3E❌ Image Not Found%3C/text%3E%3C/svg%3E';
+                }
+            };
+            
+            img.onload = () => {
+            };
+
+            const overlay = document.createElement('div');
+            overlay.className = 'memory-overlay';
+            overlay.innerHTML = '<div class="memory-play-icon">👁️</div>';
+
+            item.appendChild(img);
+            item.appendChild(overlay);
+
+            // Add click handler for lightbox
+            item.addEventListener('click', () => {
+                currentLightboxIndex = index; // Use the passed index directly
+                openLightbox();
+            });
+
+            return item;
+        }
+
+        function loadAllImages() {
+                totalFiltered: filteredImages.length,
+                masonryGrid: !!masonryGrid
+            });
+            
+            if (filteredImages.length === 0) {
+                return;
+            }
+            
+            const fragment = document.createDocumentFragment();
+
+
+            filteredImages.forEach((imageData, index) => {
+                const memoryItem = createMemoryItem(imageData, index);
+                fragment.appendChild(memoryItem);
+            });
+
+            if (masonryGrid) {
+                masonryGrid.innerHTML = ''; // Clear existing content
+                masonryGrid.appendChild(fragment);
+            } else {
+            }
+
+            // Hide loading indicator
+            showInfiniteLoading(false);
+        }
+
+        function showInfiniteLoading(show = false) {
+            if (infiniteLoadingIndicator) {
+                infiniteLoadingIndicator.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        // Removed loading placeholders - not needed when loading all images at once
+
+        // Removed preloadImages - not needed when loading all images at once
+
+        function filterImages(category) {
+            currentFilter = category;
+            
+            if (category === 'all') {
+                filteredImages = [...imageCategories];
+            } else {
+                filteredImages = imageCategories.filter(img => img.category === category);
+            }
+
+            // Load all images for the selected filter
+            loadAllImages();
+
+            // Update total count
+            if (totalPhotosEl) {
+                totalPhotosEl.textContent = filteredImages.length;
+            }
+            if (totalMemoryCount) {
+                totalMemoryCount.textContent = filteredImages.length;
+            }
+        }
+
+        // Filter button handlers
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.getAttribute('data-filter');
+                filterImages(filter);
+                
+                playTone(523.25, 0.1);
+            });
+        });
+
+        // Removed infinite scroll - loading all images at once
+
+        // Lightbox functionality
+        function openLightbox() {
+            if (currentLightboxIndex >= 0 && currentLightboxIndex < filteredImages.length) {
+                const imageData = filteredImages[currentLightboxIndex];
+                
+                // Use same smart path logic as main gallery
+                if (imageData.src.startsWith('http')) {
+                    lightboxImage.src = imageData.src;
+                } else {
+                    lightboxImage.src = `images/${imageData.src}`;
+                }
+                
+                lightboxImage.alt = imageData.title;
+                
+                if (lightboxTitle) lightboxTitle.textContent = imageData.title;
+                if (lightboxSubtitle) lightboxSubtitle.textContent = imageData.subtitle;
+                if (currentMemoryIndex) currentMemoryIndex.textContent = currentLightboxIndex + 1;
+                
+                memoriesLightbox.classList.add('active');
+                document.body.classList.add('modal-open');
+                
+                playTone(659.25, 0.1);
+            }
+        }
+
+        function closeLightboxHandler() {
+            memoriesLightbox.classList.remove('active');
+            document.body.classList.remove('modal-open');
+            playTone(523.25, 0.1);
+        }
+
+        function nextLightboxImage() {
+            currentLightboxIndex = (currentLightboxIndex + 1) % filteredImages.length;
+            openLightbox();
+        }
+
+        function prevLightboxImage() {
+            currentLightboxIndex = currentLightboxIndex === 0 ? filteredImages.length - 1 : currentLightboxIndex - 1;
+            openLightbox();
+        }
+
+        // Lightbox event handlers
+        if (closeLightbox) closeLightbox.addEventListener('click', closeLightboxHandler);
+        if (nextMemory) nextMemory.addEventListener('click', nextLightboxImage);
+        if (prevMemory) prevMemory.addEventListener('click', prevLightboxImage);
+        
+        if (memoriesLightbox) {
+            memoriesLightbox.querySelector('.lightbox-backdrop')?.addEventListener('click', closeLightboxHandler);
+        }
+
+        // Download functionality
+        if (downloadPhoto) {
+            downloadPhoto.addEventListener('click', () => {
+                if (filteredImages[currentLightboxIndex]) {
+                    const link = document.createElement('a');
+                    const imageData = filteredImages[currentLightboxIndex];
+                    
+                    // Use same smart path logic
+                    if (imageData.src.startsWith('http')) {
+                        link.href = imageData.src;
+                    } else {
+                        link.href = `images/${imageData.src}`;
+                    }
+                    
+                    link.download = `minh-chau-memory-${currentLightboxIndex + 1}.jpg`;
+                    link.click();
+                    playTone(783.99, 0.2);
+                }
+            });
+        }
+
+        // Share functionality
+        if (sharePhoto) {
+            sharePhoto.addEventListener('click', async () => {
+                const imageData = filteredImages[currentLightboxIndex];
+                if (imageData && navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: `${imageData.title} - Minh Châu's Memories`,
+                            text: `Beautiful memory from Minh Châu's first year! 💕`,
+                            url: window.location.href
+                        });
+                        playTone(880, 0.2);
+                    } catch (err) {
+                    }
+                } else {
+                    // Fallback: copy to clipboard
+                    navigator.clipboard.writeText(window.location.href);
+                    showNotification('Link copied to clipboard! 📋✨', 'success');
+                    playTone(880, 0.2);
+                }
+            });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!memoriesLightbox.classList.contains('active')) return;
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                    prevLightboxImage();
+                    break;
+                case 'ArrowRight':
+                    nextLightboxImage();
+                    break;
+                case 'Escape':
+                    closeLightboxHandler();
+                    break;
+            }
+        });
+
+        // Initialize with all images loaded
+        filterImages('all');
+        
+        // Add a simple test to see if the gallery container is working
+        setTimeout(() => {
+                masonryGridChildren: masonryGrid ? masonryGrid.children.length : 'null',
+                loadedImages,
+                filteredImagesLength: filteredImages.length
+            });
+        }, 2000);
+        
+    }
+
+    // Fallback function if main gallery fails
+    function createSimpleTestGallery() {
+        const masonryGrid = document.getElementById('memoriesMasonryGrid');
+        if (!masonryGrid) {
+            return;
+        }
+
+        // Clear any existing content
+        masonryGrid.innerHTML = '';
+
+        // Create 3 simple test images
+        const testImages = [
+            { src: 'https://via.placeholder.com/300x200/ff69b4/ffffff?text=Test+Image+1', title: 'Test Image 1' },
+            { src: 'https://via.placeholder.com/300x300/ff1493/ffffff?text=Test+Image+2', title: 'Test Image 2' },
+            { src: 'https://via.placeholder.com/300x250/ff69b4/ffffff?text=Test+Image+3', title: 'Test Image 3' }
+        ];
+
+        testImages.forEach((imageData, index) => {
+            const item = document.createElement('div');
+            item.className = 'memory-item';
+            item.style.cssText = `
+                break-inside: avoid;
+                margin-bottom: 15px;
+                border-radius: 12px;
+                overflow: hidden;
+                background: rgba(255, 255, 255, 0.9);
+                animation: memory-item-appear 0.6s ease-out forwards;
+                animation-delay: ${index * 0.2}s;
+            `;
+
+            const img = document.createElement('img');
+            img.src = imageData.src;
+            img.alt = imageData.title;
+            img.style.cssText = `
+                width: 100%;
+                height: auto;
+                display: block;
+            `;
+
+            item.appendChild(img);
+            masonryGrid.appendChild(item);
+        });
+
+    }
+
+    // If main gallery fails, try simple version after a delay
+    setTimeout(() => {
+        const masonryGrid = document.getElementById('memoriesMasonryGrid');
+        if (masonryGrid && masonryGrid.children.length === 0) {
+            createSimpleTestGallery();
+        }
+    }, 3000);
+
+    // OLD CODE DISABLED - keeping as backup but not executed
+    const preloadedImagesOld = [];
     memoryImages.forEach((src, index) => {
         const img = new Image();
         img.onload = () => {
-            console.log(`✅ Preloaded memory ${index + 1}/${memoryImages.length}`);
         };
         img.onerror = () => {
-            console.warn(`⚠️ Failed to load memory image: ${src}`);
         };
         img.src = src;
         preloadedImages.push(img);
@@ -2797,7 +3743,6 @@ function initializeMemoriesGallery() {
     const nextMemory = document.getElementById('nextMemory');
     
     if (!track || !dotsContainer) {
-        console.error('❌ Parallax Carousel: Missing required elements!');
         return;
     }
     
@@ -2863,7 +3808,6 @@ function initializeMemoriesGallery() {
         if (totalMemoriesSpan) totalMemoriesSpan.textContent = memoryImages.length;
         if (currentMemorySpan) currentMemorySpan.textContent = 1;
         
-        console.log(`🎠 Parallax Carousel initialized with ${slidesData.length} slides and ${memoryImages.length} memories!`);
     }
     
     // Navigation functions
@@ -3082,11 +4026,9 @@ function initializeMemoriesGallery() {
 
 // ===== INITIALIZE ALL NEW FEATURES =====
 function initializeMagicalFeatures() {
-    console.log('🔧 DEBUG: Starting magical features initialization...');
     initializeTimeCapsule();
     initializeMemoryGarden();
     initializeMemoriesGallery();
-    console.log('🔧 DEBUG: Magical features initialization complete!');
 }
 
 
@@ -3105,5 +4047,4 @@ window.partyApp = {
     initializeInteractiveFeatures,
     initializeMagicalFeatures,
     initializeTimeCapsule,
-    initializeConstellation
 };

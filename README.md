@@ -32,10 +32,10 @@ const PARTY_CONFIG = {
         age: "7th"    // ← Change to the birthday age (e.g., "5th", "8th")
     },
     details: {
-        date: "Saturday, October 21st, 2025",      // ← Party date
-        time: "2:00 PM - 6:00 PM",                 // ← Party time
-        location: "123 Birthday Street, Celebration City", // ← Party location
-        theme: "Princess & Unicorn Theme"          // ← Party theme
+       date: "Saturday, September 27, 2025",  // Party date
+       time: "11:00 AM",                      // Party time
+       location: "SESAN Restaurant, 14 Einstein St., Bình Thọ, Thủ Đức", // Party location
+       theme: "Dress in Your Own Style"      
     },
     contact: {
         phone: "+1 (555) 123-4567",              // ← Your phone number

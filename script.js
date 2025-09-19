@@ -2566,7 +2566,6 @@ function initializeTimeCapsule() {
 
             playTone(659.25, 0.3); // E5 note
         } catch (error) {
-            
             // Try to save locally as fallback
             try {
                 let savedMessages = JSON.parse(localStorage.getItem('timeCapsuleMessages') || '[]');
